@@ -113,7 +113,7 @@ fi
 %attr(754,root,root) %{_sysconfdir}/onbattery
 %attr(754,root,root) /etc/rc.d/init.d/apcupsd
 %attr(754,root,root) /etc/rc.d/init.d/halt
-%attr(640,root,root) /etc/logrotate.d/apcupsd
+%attr(640,root,root) %config(noreplace) %verify(not md5 size mtime) /etc/logrotate.d/apcupsd
 %dir /etc/apcupsd
 %dir /var/lib/apcupsd
 %attr(640,root,root) %ghost /var/log/apcupsd.events
