@@ -6,6 +6,7 @@ Group:		System Environment/Daemons
 Source:		http://www.brisse.dk/site/apcupsd/download/%{name}-%{version}.src.tar.gz
 Patch0:		apcups-initscript.patch
 Patch1:		apcups-makefile.patch
+Patch2:		apcupsd-Makefile-fix.patch
 Summary:	power management software for APC UPS hardware
 URL:		http://www.brisse.dk/site/apcupsd/
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -22,6 +23,7 @@ extended power failure.
 %setup -q -n %{name}-%{version}.src
 %patch0 -p1
 %patch1 -p1
+%patch2 -p0
 
 %build
 mv Makefile Makefile.orig
