@@ -29,7 +29,7 @@ shutdown during an extended power failure.
 
 %build
 
-%configure # --prefix=/usr --sbindir=/sbin --with-cgi-bin=/etc/apcupsd/cgi --enable-cgi 
+%configure  --sysconfdir=/etc/apcupsd # --prefix=/usr --sbindir=/sbin --with-cgi-bin=/etc/apcupsd/cgi --enable-cgi 
 %{__make}
 
 #mv Makefile Makefile.orig
