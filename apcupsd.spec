@@ -5,15 +5,16 @@
 Summary:	Power management software for APC UPS hardware
 Summary(pl):	Oprogramowanie do zarz±dzania energi± dla UPS-ów APC
 Name:		apcupsd
-Version:	3.10.12
-Release:	0.9
+Version:	3.10.13
+Release:	0.1
 License:	GPL v2
 Group:		Networking/Daemons
 Source0:	http://dl.sourceforge.net/apcupsd/%{name}-%{version}.tar.gz
-# Source0-md5:	4c35774d587c54276cf03926768ad551
+# Source0-md5:	d41d8cd98f00b204e9800998ecf8427e
 Source1:	%{name}.init
 Source2:	%{name}.logrotate
 Patch0:		%{name}-configure.patch
+Patch1:		%{name}-llh.patch
 URL:		http://www.apcupsd.com/
 BuildRequires:	autoconf
 Requires(post,preun):	/sbin/chkconfig
@@ -39,6 +40,7 @@ zasilania.
 %prep
 %setup -q
 %patch0 -p1
+%patch1 -p1
 
 %build
 cd autoconf
@@ -80,9 +82,7 @@ EOF
 rm -rf $RPM_BUILD_ROOT
 
 %post
-if [ "$1" = "1" ]; then
-	/sbin/chkconfig --add apcupsd
-fi
+/sbin/chkconfig --add apcupsd
 if [ -f /var/lock/subsys/apcupsd ]; then
         /etc/rc.d/init.d/apcupsd restart >&2
 else
@@ -99,7 +99,7 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%doc ChangeLog Developers doc/{README.apcaccess,developers_manual,home-page,logo}
+%doc ChangeLog Developers doc/{README.apcaccess,README.solaris}
 %{_mandir}/man8/apcupsd.*
 %attr(755,root,root) %{_sbindir}/*
 %attr(640,root,root) %config(noreplace) %{_sysconfdir}/apcupsd.conf
@@ -114,6 +114,7 @@ fi
 %attr(754,root,root) /etc/rc.d/init.d/apcupsd
 %attr(754,root,root) /etc/rc.d/init.d/halt
 %attr(640,root,root) /etc/logrotate.d/apcupsd
+%dir /etc/apcupsd
 %dir /var/lib/apcupsd
 %attr(640,root,root) %ghost /var/log/apcupsd.events
 %attr(640,root,root) %ghost /var/lib/apcupsd/apcupsd.status
