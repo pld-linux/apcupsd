@@ -1,0 +1,5 @@
+# apcupsd startup configuration file
+
+# Try to define nice-level for running apcupsd
+SERVICE_RUN_NICE_LEVEL="+5"
+

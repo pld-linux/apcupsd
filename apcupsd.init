@@ -22,6 +22,11 @@ else
 	exit 0
 fi
 
+# Get service config
+if [ -f /etc/sysconfig/apcupsd ]; then
+        . /etc/sysconfig/apcupsd
+fi
+
 RETVAL=0
 # See how we were called.
 case "$1" in
@@ -30,7 +35,7 @@ case "$1" in
 	# Check if the service is already running?
 	if [ ! -f /var/lock/subsys/apcupsd ]; then
 		msg_starting "APC UPS monitoring"
-		daemon /usr/sbin/apcupsd -f /etc/apcupsd/apcupsd.conf
+		daemon $SERVICE_RUN_NICE_LEVEL /usr/sbin/apcupsd -f /etc/apcupsd/apcupsd.conf
 		RETVAL=$?
 		[ $RETVAL -eq 0 ] && touch /var/lock/subsys/apcupsd
 	else
