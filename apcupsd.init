@@ -1,0 +1,69 @@
+#! /bin/sh
+#
+# apcupsd      This shell script takes care of starting and stopping
+#	       the apcupsd UPS monitoring daemon.
+#
+# chkconfig: 2345 60 99
+# description: apcupsd monitors power and takes action if necessary
+
+# Source function library
+. /etc/rc.d/init.d/functions
+
+# Get network config
+. /etc/sysconfig/network
+
+# Check that networking is up.
+if is_yes "${NETWORKING}"; then
+	if [ ! -f /var/lock/subsys/network -a "$1" != stop -a "$1" != status ]; then
+		msg_network_down "UPS monitoring"
+		exit 1
+	fi
+else
+	exit 0
+fi
+
+RETVAL=0
+# See how we were called.
+case "$1" in
+  start)
+	rm -f /etc/apcupsd/powerfail
+	# Check if the service is already running?
+	if [ ! -f /var/lock/subsys/apcupsd ]; then
+		show "Starting APC UPS monitoring"
+		daemon /usr/sbin/apcupsd -f /etc/apcupsd/apcupsd.conf
+		RETVAL=$?
+		[ $RETVAL -eq 0 ] && touch /var/lock/subsys/apcupsd
+	else
+		msg_already_running "APC UPS monitoring"
+	fi
+	;;
+  stop)
+	if [ -f /var/lock/subsys/apcupsd ]; then
+		msg_stopping "APC UPS monitoring"
+		killproc apcupsd
+		rm -f /var/lock/subsys/apcupsd
+	else
+		msg_not_running "APC UPS monitoring"
+	fi
+	;;
+  restart)
+	$0 stop
+       	$0 start
+	;;
+  powerdown)
+	if [ -f /etc/apcupsd/powerfail ]; then
+		show "Switching the power off"
+		/etc/apcupsd/apccontrol killpower
+		sleep 60
+		fail
+	fi
+	;;
+  status)
+	/usr/sbin/apcaccess status
+	;;
+  *)
+	msg_usage "$0 {start|stop|restart|status|powerdown}"
+	exit 3
+esac
+
+exit $RETVAL
