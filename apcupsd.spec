@@ -8,7 +8,7 @@ Patch0:		apcups-initscript.patch
 Patch1:		apcups-makefile.patch
 Summary:	power management software for APC UPS hardware
 URL:		http://www.brisse.dk/site/apcupsd/
-BuildRoot:	/tmp/%{name}-%{version}-root
+BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 #Icon:		apcupsd-logo.xpm
 
 %description
