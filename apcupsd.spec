@@ -32,7 +32,9 @@ extended power failure.
 %patch2 -p1
 
 %build
-make MANPREFIX=$RPM_BUILD_ROOT%{_mandir} linux
+make linux \
+	MANPREFIX=$RPM_BUILD_ROOT%{_mandir} \
+	CFLAGS="$RPM_OPT_FLAGS -I./include"
 
 %install
 
@@ -74,7 +76,3 @@ rm -rf ${RPM_BUILD_ROOT}
 %config /etc/rc.d/init.d/apcupsd
 %ghost /var/log/apcupsd.log
 %ghost /etc/apcupsd.status
-
-%changelog
-* Wed Oct 13 1999 Wojciech "sas" Ciêciwa <cieciwa@alpha.zarz.agh.edu.pl>
-- build rpm.
