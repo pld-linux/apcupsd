@@ -9,6 +9,7 @@ Release:	0.1
 License:	GPL v2
 Group:		Networking/Daemons
 Source0:	http://dl.sourceforge.net/apcupsd/%{name}-%{version}.tar.gz
+# Source0-md5:	f182db64c8acdae18f896ecdc064a239
 Patch0:		%{name}-paths.patch
 Patch1:		%{name}-pld.patch
 #Patch1:	apcups-makefile.patch
