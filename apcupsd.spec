@@ -14,7 +14,7 @@ URL:		http://www.sibbald.com/apcupsd/
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 #Icon:		apcupsd-logo.xpm
 
-%define		_sysconfdir	/etc/apcupsd
+%define		_sysconfdir	/etc
 
 %description
 UPS power management under Linux for APCC Products. It allows your
@@ -35,7 +35,7 @@ shutdown during an extended power failure.
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{%{_sbindir},%{_bindir},%{_mandir}/man8,%{_sysconfdir}/,/etc/rc.d/init.d,/var/log}
+install -d $RPM_BUILD_ROOT{%{_sbindir},%{_bindir},%{_mandir}/man8,%{_sysconfdir}/apcupsd,/etc/rc.d/init.d,/var/log}
 
 install apcupsd apcnetd $RPM_BUILD_ROOT%{_sbindir}
 install apcaccess $RPM_BUILD_ROOT%{_bindir}
