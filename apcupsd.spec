@@ -1,20 +1,21 @@
 Summary:	Power management software for APC UPS hardware
 Name:		apcupsd
 Version:	3.8.1
-Release:	2
+Release:	3
 License:	GPL v2
 Group:		Networking/Daemons
 Group(de):	Netzwerkwesen/Server
 Group(pl):	Sieciowe/Serwery
 Source0:	http://www.sibbald.com/apcupsd/download/%{name}-%{version}.tar.gz
 Patch0:		%{name}-paths.patch
+Patch1:		%{name}-pld.patch
 #Patch1:	apcups-makefile.patch
 #Patch2:	%{name}-Makefile-fix.patch
 URL:		http://www.sibbald.com/apcupsd/
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 #Icon:		apcupsd-logo.xpm
 
-%define		_sysconfdir	/etc
+%define		_sysconfdir	/etc/apcupsd
 
 %description
 UPS power management under Linux for APCC Products. It allows your
@@ -26,7 +27,7 @@ shutdown during an extended power failure.
 %prep
 %setup -q
 %patch0 -p1
-#%patch1 -p1
+%patch1 -p1
 #%patch2 -p0
 
 %build
@@ -35,18 +36,19 @@ shutdown during an extended power failure.
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{%{_sbindir},%{_bindir},%{_mandir}/man8,%{_sysconfdir}/apcupsd,/etc/rc.d/init.d,/var/log}
+install -d $RPM_BUILD_ROOT{%{_sbindir},%{_bindir},%{_mandir}/man8,%{_sysconfdir},/etc/rc.d/init.d,/var/log,/var/lib/apcupsd}
 
 install apcupsd apcnetd $RPM_BUILD_ROOT%{_sbindir}
 install apcaccess $RPM_BUILD_ROOT%{_bindir}
-install etc/* $RPM_BUILD_ROOT%{_sysconfdir}/apcupsd
-install distributions/redhat/apccontrol.sh $RPM_BUILD_ROOT%{_sysconfdir}/apcupsd/apccontrol
+install etc/* $RPM_BUILD_ROOT%{_sysconfdir}
+install distributions/redhat/apccontrol.sh $RPM_BUILD_ROOT%{_sysconfdir}/apccontrol
 install distributions/redhat/apcupsd  $RPM_BUILD_ROOT/etc/rc.d/init.d/apcupsd
 install doc/apcupsd.man $RPM_BUILD_ROOT%{_mandir}/man8
 tar czf doc.tar.gz doc
 
 touch ${RPM_BUILD_ROOT}/var/log/apcupsd.log
-touch ${RPM_BUILD_ROOT}%{_sysconfdir}/apcupsd.status
+touch ${RPM_BUILD_ROOT}/var/lib/apcupsd/apcupsd.status
+touch ${RPM_BUILD_ROOT}/var/lib/apcupsd/apcupsd.events
 
 %clean
 rm -rf ${RPM_BUILD_ROOT}
@@ -86,7 +88,8 @@ chkconfig --del apcupsd
 %attr(755,root,root) %{_sbindir}/*
 %attr(755,root,root) %{_bindir}/*
 #%attr(755,root,root) %config /sbin/powersc
-%attr(640,root,root) %config(noreplace) %{_sysconfdir}/apcupsd/apcupsd.conf
+%attr(640,root,root) %config(noreplace) %{_sysconfdir}/apcupsd.conf
 %attr(754,root,root) /etc/rc.d/init.d/apcupsd
 %ghost /var/log/apcupsd.log
-%ghost %{_sysconfdir}/apcupsd.status
+%ghost /var/lib/apcupsd/apcupsd.status
+%ghost /var/lib/apcupsd/apcupsd.events
