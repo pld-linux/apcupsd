@@ -46,7 +46,7 @@ case "$1" in
 		msg_not_running "APC UPS monitoring"
 	fi
 	;;
-  restart)
+  restart|force-reload)
 	$0 stop
        	$0 start
 	;;
@@ -62,7 +62,7 @@ case "$1" in
 	/usr/sbin/apcaccess status
 	;;
   *)
-	msg_usage "$0 {start|stop|restart|status|powerdown}"
+	msg_usage "$0 {start|stop|restart|force-reload|status|powerdown}"
 	exit 3
 esac
 
