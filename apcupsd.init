@@ -29,7 +29,7 @@ case "$1" in
 	rm -f /etc/apcupsd/powerfail
 	# Check if the service is already running?
 	if [ ! -f /var/lock/subsys/apcupsd ]; then
-		show "Starting APC UPS monitoring"
+		msg_starting "APC UPS monitoring"
 		daemon /usr/sbin/apcupsd -f /etc/apcupsd/apcupsd.conf
 		RETVAL=$?
 		[ $RETVAL -eq 0 ] && touch /var/lock/subsys/apcupsd
