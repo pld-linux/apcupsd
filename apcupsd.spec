@@ -1,18 +1,20 @@
+Summary:	Power management software for APC UPS hardware
 Name:		apcupsd
 Version:	3.8.1
 Release:	2
 License:	GPL v2
 Group:		Networking/Daemons
+Group(de):	Netzwerkwesen/Server
 Group(pl):	Sieciowe/Serwery
-Source0:	http://www.sibbald.com/apcupsd/download/apcupsd-3.8.1.tar.gz
-#Patch0:		apcups-initscript.patch
-#Patch1:		apcups-makefile.patch
-#Patch2:		apcupsd-Makefile-fix.patch
-Summary:	power management software for APC UPS hardware
+Source0:	http://www.sibbald.com/apcupsd/download/%{name}-%{version}.tar.gz
+Patch0:		%{name}-paths.patch
+#Patch1:	apcups-makefile.patch
+#Patch2:	%{name}-Makefile-fix.patch
 URL:		http://www.sibbald.com/apcupsd/
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 #Icon:		apcupsd-logo.xpm
 
+%define		_sysconfdir	/etc/apcupsd
 
 %description
 UPS power management under Linux for APCC Products. It allows your
@@ -23,36 +25,26 @@ shutdown during an extended power failure.
 
 %prep
 %setup -q
-#%patch0 -p1
+%patch0 -p1
 #%patch1 -p1
 #%patch2 -p0
 
 %build
-
-%configure  --sysconfdir=/etc/apcupsd # --prefix=/usr --sbindir=/sbin --with-cgi-bin=/etc/apcupsd/cgi --enable-cgi 
+%configure
 %{__make}
-
-#mv Makefile Makefile.orig
-#cat Makefile.orig \
-# | sed "s,^PREFIX    =,PREFIX    = ${RPM_BUILD_ROOT},"  \
-# | sed "s,^MANPREFIX = /usr,MANPREFIX = ${RPM_BUILD_ROOT}/usr," \
-# > Makefile
-#%{__make} linux
 
 %install
 rm -rf $RPM_BUILD_ROOT
-
-install -d $RPM_BUILD_ROOT{%{_sbindir},%{_bindir},%{_mandir}/man8,/etc/apcupsd/,/etc/rc.d/init.d,/var/log}
+install -d $RPM_BUILD_ROOT{%{_sbindir},%{_bindir},%{_mandir}/man8,%{_sysconfdir}/,/etc/rc.d/init.d,/var/log}
 
 install apcupsd apcnetd $RPM_BUILD_ROOT%{_sbindir}
 install apcaccess $RPM_BUILD_ROOT%{_bindir}
-install etc/* $RPM_BUILD_ROOT/etc/apcupsd
-install distributions/redhat/apccontrol.sh $RPM_BUILD_ROOT/etc/apcupsd/apccontrol
+install etc/* $RPM_BUILD_ROOT%{_sysconfdir}/apcupsd
+install distributions/redhat/apccontrol.sh $RPM_BUILD_ROOT%{_sysconfdir}/apcupsd/apccontrol
 install distributions/redhat/apcupsd  $RPM_BUILD_ROOT/etc/rc.d/init.d/apcupsd
 install doc/apcupsd.man $RPM_BUILD_ROOT%{_mandir}/man8
 tar czf doc.tar.gz doc
 
-#[ -x /sbin/powersc ] && /sbin/powersc RESTARTME
 touch ${RPM_BUILD_ROOT}/var/log/apcupsd.log
 touch ${RPM_BUILD_ROOT}%{_sysconfdir}/apcupsd.status
 
