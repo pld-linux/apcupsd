@@ -55,7 +55,7 @@ rm -rf ${RPM_BUILD_ROOT}
 
 %post
 /sbin/ldconfig
-%chkconfig_post
+%chkconfig_add
 
 #if !(grep /sbin/powersc /etc/rc.d/init.d/halt > /dev/null); then
 cp -f /etc/rc.d/init.d/halt /etc/rc.d/init.d/halt.rpmorig
@@ -78,7 +78,7 @@ fi\
 
 
 %preun
-%chkconfig_preun
+%chkconfig_del
 
 %files
 %defattr(644,root,root,755)
