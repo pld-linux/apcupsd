@@ -42,6 +42,7 @@ zasilania.
 
 %build
 cd autoconf
+cp -f /usr/share/automake/config.sub .
 %{__autoconf}
 cp -f ./configure ..
 cd ..
