@@ -1,0 +1,26 @@
+diff -uNr apcupsd-3.5.8.src.orig/Makefile apcupsd-3.5.8.src/Makefile
+--- apcupsd-3.5.8.src.orig/Makefile	Wed Apr  7 18:06:41 1999
++++ apcupsd-3.5.8.src/Makefile	Fri Aug  6 13:37:39 1999
+@@ -498,22 +498,11 @@
+ depend : .depend
+ 
+ install :
+-	powersc STOP
+-	sleep 5
+-
+ 	$(CP) apcupsd$(NAME) $(PREFIX)/sbin/apcupsd
+-	$(CHMOD) 110 $(PREFIX)/sbin/apcupsd
+ 	$(CP) apcaccess$(NAME) $(PREFIX)/bin/apcaccess
+-	$(CHMOD) 110 $(PREFIX)/bin/apcaccess
+ 	$(CP) installs/powersc $(PREFIX)/sbin/powersc
+ 	$(CP) docs/apcupsd.man8 $(MANPREFIX)/man/man8/apcupsd.8
+ 	$(CP) installs/apcupsd.conf $(PREFIX)/etc/apcupsd.conf
+-	$(CHOWN) root.wheel $(PREFIX)/etc/apcupsd.conf
+-	$(CHMOD) 640 $(PREFIX)/etc/apcupsd.conf
+-	$(CHOWN) root.bin $(PREFIX)/sbin/apcupsd
+-	$(CHMOD) 110 $(PREFIX)/sbin/apcupsd
+-	$(CHOWN) root.bin $(PREFIX)/sbin/powersc
+-	$(CHMOD) 550 $(PREFIX)/sbin/powersc
+ 
+ 
+ tar :	clobber
