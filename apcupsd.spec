@@ -16,6 +16,7 @@ Source2:	%{name}.logrotate
 Patch0:		%{name}-configure.patch
 URL:		http://www.apcupsd.com/
 BuildRequires:	autoconf
+BuildRequires:	automake
 Requires(post,preun):	/sbin/chkconfig
 Requires(post):	fileutils
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
