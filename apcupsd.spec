@@ -1,6 +1,6 @@
 #
 # Conditional build:
-%bcond_without  test	# without TEST support
+%bcond_without	test	# without TEST support
 %bcond_with	usb	# with USB support
 #
 Summary:	Power management software for APC UPS hardware
@@ -91,7 +91,7 @@ rm -rf $RPM_BUILD_ROOT
 %post
 /sbin/chkconfig --add apcupsd
 if [ -f /var/lock/subsys/apcupsd ]; then
-        /etc/rc.d/init.d/apcupsd restart >&2
+	/etc/rc.d/init.d/apcupsd restart >&2
 else
 	echo "Run \"/etc/rc.d/init.d/apcupsd start\" to start apcupsd daemon."
 fi
