@@ -5,8 +5,6 @@ Version:	3.8.1
 Release:	3
 License:	GPL v2
 Group:		Networking/Daemons
-Group(de):	Netzwerkwesen/Server
-Group(pl):	Sieciowe/Serwery
 Source0:	http://www.sibbald.com/apcupsd/download/%{name}-%{version}.tar.gz
 Patch0:		%{name}-paths.patch
 Patch1:		%{name}-pld.patch
