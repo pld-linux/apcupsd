@@ -1,10 +1,10 @@
 #! /bin/sh
 #
-# apcupsd      This shell script takes care of starting and stopping
-#	       the apcupsd UPS monitoring daemon.
+# apcupsd	This shell script takes care of starting and stopping
+#		the apcupsd UPS monitoring daemon.
 #
-# chkconfig: 2345 60 99
-# description: apcupsd monitors power and takes action if necessary
+# chkconfig:	2345 60 99
+# description:	apcupsd monitors power and takes action if necessary
 
 # Source function library
 . /etc/rc.d/init.d/functions
@@ -48,7 +48,7 @@ case "$1" in
 	;;
   restart|force-reload)
 	$0 stop
-       	$0 start
+	$0 start
 	;;
   powerdown)
 	if [ -f /etc/apcupsd/powerfail ]; then
