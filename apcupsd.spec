@@ -15,6 +15,7 @@ Source0:	http://dl.sourceforge.net/apcupsd/%{name}-%{version}.tar.gz
 # Source0-size:	3858266
 Source1:	%{name}.init
 Source2:	%{name}.logrotate
+Source3:	%{name}.sysconfig
 Patch0:		%{name}-configure.patch
 URL:		http://www.apcupsd.com/
 BuildRequires:	autoconf
@@ -74,6 +75,7 @@ install -d $RPM_BUILD_ROOT/etc/{apcupsd,logrotate.d,rc.d/init.d} \
 
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/apcupsd
 install %{SOURCE2} $RPM_BUILD_ROOT/etc/logrotate.d/apcupsd
+install %{SOURCE3} $RPM_BUILD_ROOT/etc/sysconfig/apcupsd
 
 touch $RPM_BUILD_ROOT/var/log/apcupsd.events
 touch $RPM_BUILD_ROOT/var/lib/apcupsd/apcupsd.status
@@ -108,6 +110,7 @@ fi
 %{_mandir}/man8/apcupsd.*
 %attr(755,root,root) %{_sbindir}/*
 %attr(640,root,root) %config(noreplace) %verify(not md5 size mtime) %{_sysconfdir}/apcupsd.conf
+%attr(640,root,root) %config(noreplace) /etc/sysconfig/apcupsd
 %attr(754,root,root) %{_sysconfdir}/apccontrol
 %attr(754,root,root) %{_sysconfdir}/changeme
 %attr(754,root,root) %{_sysconfdir}/commfailure
