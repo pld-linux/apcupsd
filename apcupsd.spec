@@ -55,7 +55,7 @@ rm -rf ${RPM_BUILD_ROOT}
 
 %post
 /sbin/ldconfig
-/sbin/chkconfig --add apcupsd
+%chkconfig_post
 
 #if !(grep /sbin/powersc /etc/rc.d/init.d/halt > /dev/null); then
 cp -f /etc/rc.d/init.d/halt /etc/rc.d/init.d/halt.rpmorig
@@ -78,7 +78,7 @@ fi\
 
 
 %preun
-chkconfig --del apcupsd
+%chkconfig_preun
 
 %files
 %defattr(644,root,root,755)
