@@ -1,20 +1,18 @@
 Name:		apcupsd
-Version:	3.5.8
+Version:	3.8.1
 Release:	2
 License:	GPL v2
 Group:		Networking/Daemons
 Group(pl):	Sieciowe/Serwery
-Source0:	http://www.brisse.dk/site/apcupsd/download/%{name}-%{version}.src.tar.gz
-Patch0:		apcups-initscript.patch
-Patch1:		apcups-makefile.patch
-Patch2:		apcupsd-Makefile-fix.patch
+Source0:	http://www.sibbald.com/apcupsd/download/apcupsd-3.8.1.tar.gz
+#Patch0:		apcups-initscript.patch
+#Patch1:		apcups-makefile.patch
+#Patch2:		apcupsd-Makefile-fix.patch
 Summary:	power management software for APC UPS hardware
-URL:		http://www.brisse.dk/site/apcupsd/
+URL:		http://www.sibbald.com/apcupsd/
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 #Icon:		apcupsd-logo.xpm
 
-%define		_prefix		/
-%define		_mandir		/usr/share/man
 
 %description
 UPS power management under Linux for APCC Products. It allows your
@@ -24,36 +22,37 @@ SmartUPS v/s, or SmartUPS, and then properly executes a controlled
 shutdown during an extended power failure.
 
 %prep
-%setup -q -n %{name}-%{version}.src
-%patch0 -p1
-%patch1 -p1
-%patch2 -p0
+%setup -q
+#%patch0 -p1
+#%patch1 -p1
+#%patch2 -p0
 
 %build
-mv Makefile Makefile.orig
-cat Makefile.orig \
- | sed "s,^PREFIX    =,PREFIX    = ${RPM_BUILD_ROOT},"  \
- | sed "s,^MANPREFIX = /usr,MANPREFIX = ${RPM_BUILD_ROOT}/usr," \
- > Makefile
-%{__make} linux
+
+%configure # --prefix=/usr --sbindir=/sbin --with-cgi-bin=/etc/apcupsd/cgi --enable-cgi 
+%{__make}
+
+#mv Makefile Makefile.orig
+#cat Makefile.orig \
+# | sed "s,^PREFIX    =,PREFIX    = ${RPM_BUILD_ROOT},"  \
+# | sed "s,^MANPREFIX = /usr,MANPREFIX = ${RPM_BUILD_ROOT}/usr," \
+# > Makefile
+#%{__make} linux
 
 %install
 rm -rf $RPM_BUILD_ROOT
 
-# Some issues :
-# - why doesn't the Makefile know that it should install *-linux ??
-# - make install tries to stop apcupsd. That's not necessary (buildroot) (hany: not issue anymore)
+install -d $RPM_BUILD_ROOT{%{_sbindir},%{_bindir},%{_mandir}/man8,/etc/apcupsd/,/etc/rc.d/init.d,/var/log}
 
-#install -d ${RPM_BUILD_ROOT}/{sbin,bin,etc/rc.d/init.d,usr/man/man8,var/log}
-install -d ${RPM_BUILD_ROOT}/{bin,sbin,usr/share/man/man8}
-install -d ${RPM_BUILD_ROOT}/{etc/rc.d/init.d,var/log}
+install apcupsd apcnetd $RPM_BUILD_ROOT%{_sbindir}
+install apcaccess $RPM_BUILD_ROOT%{_bindir}
+install etc/* $RPM_BUILD_ROOT/etc/apcupsd
+install distributions/redhat/apccontrol.sh $RPM_BUILD_ROOT/etc/apcupsd/apccontrol
+install distributions/redhat/apcupsd  $RPM_BUILD_ROOT/etc/rc.d/init.d/apcupsd
+install doc/apcupsd.man $RPM_BUILD_ROOT%{_mandir}/man8
+tar czf doc.tar.gz doc
 
-NAME="-linux"  make MANPREFIX="${RPM_BUILD_ROOT}%{_datadir}/" install
-# hany: why this? we're just building. not installing
 #[ -x /sbin/powersc ] && /sbin/powersc RESTARTME
-gzip -9nf ${RPM_BUILD_ROOT}%{_mandir}/man8/*
-install installs/apcupsd.conf ${RPM_BUILD_ROOT}%{_sysconfdir}
-install installs/apcups.rhs ${RPM_BUILD_ROOT}/etc/rc.d/init.d/apcups
 touch ${RPM_BUILD_ROOT}/var/log/apcupsd.log
 touch ${RPM_BUILD_ROOT}%{_sysconfdir}/apcupsd.status
 
@@ -62,40 +61,40 @@ rm -rf ${RPM_BUILD_ROOT}
 
 %post
 /sbin/ldconfig
-/sbin/chkconfig --add apcups
-if !(grep /sbin/powersc /etc/rc.d/init.d/halt > /dev/null); then
+/sbin/chkconfig --add apcupsd
+
+#if !(grep /sbin/powersc /etc/rc.d/init.d/halt > /dev/null); then
 cp -f /etc/rc.d/init.d/halt /etc/rc.d/init.d/halt.rpmorig
-sed -e '/# Now halt or reboot./i\' \
-     -e '\
+#sed -e '/# Now halt or reboot./i\' \
+#     -e '\
 # See if this is a powerfail situation.\
-if [ -f /etc/powerfail ]; then\
+
+echo ' 
+if [ -f /etc/apcupsd/powerfail ]; then\
   echo "APCUPSD to the Rescue!"\
   echo\
-  /sbin/powersc KILL\
+  /etc/apcupsd/apccontrol killpower \
   echo\
   sleep 120\
   exit 1\
 fi\
-' /etc/rc.d/init.d/halt.rpmorig > /etc/rc.d/init.d/halt
+' >  /etc/rc.d/init.d/halt
+#' /etc/rc.d/init.d/halt.rpmorig > /etc/rc.d/init.d/halt
+#fi
 
-fi
-echo Check the documentation to see whether /etc/rc.d/init.d/halt has a
-echo correct invocation of /sbin/powersc .
 
 %preun
-chkconfig --del apcups
+chkconfig --del apcupsd
 
 %files
 %defattr(644,root,root,755)
-%doc README.NEW Changelog port.gif Statement.APCC
-%doc %{name}-%{version}.src.lsm
-%doc readmes/* docs/apcupsd.docs
-%doc installs/halt.rhs installs/apcups.rhs installs/powersc
-%{_mandir}/man8/apcupsd.8*
-%attr(755,root,root) /sbin/apcupsd
-%attr(755,root,root) /bin/apcaccess
-%attr(755,root,root) %config /sbin/powersc
-%attr(640,root,root) %config(noreplace) %{_sysconfdir}/apcupsd.conf
-%attr(754,root,root) /etc/rc.d/init.d/apcups
+%doc doc.tar.gz 
+%doc ChangeLog 
+%{_mandir}/man8/apcupsd.*
+%attr(755,root,root) %{_sbindir}/*
+%attr(755,root,root) %{_bindir}/*
+#%attr(755,root,root) %config /sbin/powersc
+%attr(640,root,root) %config(noreplace) %{_sysconfdir}/apcupsd/apcupsd.conf
+%attr(754,root,root) /etc/rc.d/init.d/apcupsd
 %ghost /var/log/apcupsd.log
 %ghost %{_sysconfdir}/apcupsd.status
