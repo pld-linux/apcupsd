@@ -9,6 +9,7 @@ Release:	0.1
 License:	GPL v2
 Group:		Networking/Daemons
 Source0:	http://dl.sourceforge.net/apcupsd/%{name}-%{version}.tar.gz
+Source10:	%{name}-rc.d-halt
 # Source0-md5:	b69ccf4f4196582ab3e26bf6af937610
 Patch0:		%{name}-paths.patch 
 Patch1:		%{name}-pld.patch
@@ -56,6 +57,7 @@ install -d $RPM_BUILD_ROOT{/etc/rc.d/init.d,/var/log,/var/lib/apcupsd,\
 	DESTDIR=$RPM_BUILD_ROOT
 install platforms/unknown/apcupsd $RPM_BUILD_ROOT/etc/rc.d/init.d/apcupsd
 #install platforms/pld/apcupsd  $RPM_BUILD_ROOT/etc/rc.d/init.d/apcupsd
+install %{SOURCE10} $RPM_BUILD_ROOT/etc/rc.d/init.d/halt-apcupsd
 
 mkdir -p $RPM_BUILD_ROOT/var/log
 mkdir -p $RPM_BUILD_ROOT/var/lib/apcupsd
@@ -72,23 +74,13 @@ rm -rf $RPM_BUILD_ROOT
 
 #if !(grep /sbin/powersc /etc/rc.d/init.d/halt > /dev/null); then
 cp -f /etc/rc.d/init.d/halt /etc/rc.d/init.d/halt.rpmorig
+ln -s /etc/rc.d/init.d/halt-apcupsd /etc/rc.d/init.d/halt
 #sed -e '/# Now halt or reboot./i\' \
 #     -e '\
 # See if this is a powerfail situation.\
 
-echo '
-if [ -f /etc/apcupsd/powerfail ]; then\
-  echo "APCUPSD to the Rescue!"\
-  echo\
-  /etc/apcupsd/apccontrol killpower \
-  echo\
-  sleep 120\
-  exit 1\
-fi\
-' >  /etc/rc.d/init.d/halt
 #' /etc/rc.d/init.d/halt.rpmorig > /etc/rc.d/init.d/halt
 #fi
-chmod 754 /etc/rc.d/init.d/halt
 
 %preun
 if [ "$1" = "0" ]; then
@@ -103,6 +95,7 @@ fi
 #%attr(755,root,root) %config /sbin/powersc
 %attr(640,root,root) %config(noreplace) %{_sysconfdir}/*
 %attr(754,root,root) /etc/rc.d/init.d/apcupsd
+%attr(754,root,root) /etc/rc.d/init.d/halt-apcupsd
 %ghost /var/log/apcupsd.log
 %ghost /var/lib/apcupsd/apcupsd.status
 %ghost /var/lib/apcupsd/apcupsd.events
