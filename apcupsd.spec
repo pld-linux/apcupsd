@@ -4,12 +4,12 @@
 Summary:	Power management software for APC UPS hardware
 Summary(pl):	Oprogramowanie do zarz±dzania energi± dla UPS-ów APC
 Name:		apcupsd
-Version:	3.10.6
+Version:	3.10.10
 Release:	0.1
 License:	GPL v2
 Group:		Networking/Daemons
 Source0:	http://dl.sourceforge.net/apcupsd/%{name}-%{version}.tar.gz
-# Source0-md5:	a015d65ebeae9ee08aacbc8e6e7ac217
+# Source0-md5:	b69ccf4f4196582ab3e26bf6af937610
 Patch0:		%{name}-paths.patch
 Patch1:		%{name}-pld.patch
 #Patch1:	apcups-makefile.patch
@@ -51,13 +51,16 @@ rm -rf $RPM_BUILD_ROOT
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
-
-install platforms/redhat/apcupsd $RPM_BUILD_ROOT/etc/rc.d/init.d/apcupsd
+mkdir -p $RPM_BUILD_ROOT/etc/rc.d/init.d
+install platforms/unknown/apcupsd $RPM_BUILD_ROOT/etc/rc.d/init.d/apcupsd
 #install platforms/pld/apcupsd  $RPM_BUILD_ROOT/etc/rc.d/init.d/apcupsd
 
+mkdir -p $RPM_BUILD_ROOT/var/log
+mkdir -p $RPM_BUILD_ROOT/var/lib/apcupsd
 touch $RPM_BUILD_ROOT/var/log/apcupsd.log
 touch $RPM_BUILD_ROOT/var/lib/apcupsd/apcupsd.status
 touch $RPM_BUILD_ROOT/var/lib/apcupsd/apcupsd.events
+mkdir -p $RPM_BUILD_ROOT/usr/share/doc/%{name}-%{version}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -92,7 +95,7 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%doc ChangeLog Developers doc/{README.apcaccess,developers_manual,home-page,logo,manual}
+%doc ChangeLog Developers doc/{README.apcaccess,developers_manual,home-page,logo}
 %{_mandir}/man8/apcupsd.*
 %attr(755,root,root) %{_sbindir}/*
 #%attr(755,root,root) %config /sbin/powersc
