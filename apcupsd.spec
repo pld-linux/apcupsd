@@ -1,12 +1,13 @@
 #
 # Conditional build:
+%bcond_without  test	# without TEST support
 %bcond_with	usb	# with USB support
 #
 Summary:	Power management software for APC UPS hardware
 Summary(pl):	Oprogramowanie do zarz±dzania energi± dla UPS-ów APC
 Name:		apcupsd
 Version:	3.10.15
-Release:	1
+Release:	2
 License:	GPL v2
 Group:		Networking/Daemons
 Source0:	http://dl.sourceforge.net/apcupsd/%{name}-%{version}.tar.gz
@@ -50,6 +51,9 @@ cd ..
 %configure \
 	--with-log-dir=%{_var}/log \
 	--with-stat-dir=%{_var}/lib/apcupsd \
+%if %{with test}
+	--enable-test \
+%endif
 %if %{with usb}
 	--enable-usb \
 	--with-serial-dev=/dev/usb/hiddev[0-15] \
