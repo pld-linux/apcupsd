@@ -88,6 +88,6 @@ chkconfig --del apcups
 %attr(755, root, root) /bin/apcaccess
 %attr(755, root, bin)  %config /sbin/powersc
 %attr(640, root, root) %config(noreplace) /etc/apcupsd.conf
-%attr(755, root, root) %config /etc/rc.d/init.d/apcups
+%attr(754, root, root) /etc/rc.d/init.d/apcups
 %ghost /var/log/apcupsd.log
 %ghost /etc/apcupsd.status
