@@ -12,6 +12,7 @@ License:	GPL v2
 Group:		Networking/Daemons
 Source0:	http://dl.sourceforge.net/apcupsd/%{name}-%{version}.tar.gz
 # Source0-md5:	21b2b744ebcaa0010367a403a9c5e66c
+# Source0-size:	3858266
 Source1:	%{name}.init
 Source2:	%{name}.logrotate
 Patch0:		%{name}-configure.patch
