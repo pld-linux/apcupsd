@@ -11,7 +11,8 @@ Patch1:		%{name}-pld.patch
 #Patch1:	apcups-makefile.patch
 #Patch2:	%{name}-Makefile-fix.patch
 URL:		http://www.sibbald.com/apcupsd/
-Prereq:		chkconfig
+Requires(post,preun);	/sbin/chkconfig
+Requires(post):	fileutils
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 #Icon:		apcupsd-logo.xpm
 
@@ -61,7 +62,6 @@ touch ${RPM_BUILD_ROOT}/var/lib/apcupsd/apcupsd.events
 rm -rf $RPM_BUILD_ROOT
 
 %post
-/sbin/ldconfig
 /sbin/chkconfig --add apcupsd
 
 #if !(grep /sbin/powersc /etc/rc.d/init.d/halt > /dev/null); then
@@ -82,10 +82,11 @@ fi\
 ' >  /etc/rc.d/init.d/halt
 #' /etc/rc.d/init.d/halt.rpmorig > /etc/rc.d/init.d/halt
 #fi
+chmod 754 /etc/rc.d/init.d/halt
 
 %preun
 if [ "$1" = "0" ]; then
-	chkconfig --del apcupsd
+	/sbin/chkconfig --del apcupsd
 fi
 
 %files
