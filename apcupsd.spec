@@ -35,7 +35,7 @@ cat Makefile.orig \
  | sed "s,^PREFIX    =,PREFIX    = ${RPM_BUILD_ROOT},"  \
  | sed "s,^MANPREFIX = /usr,MANPREFIX = ${RPM_BUILD_ROOT}/usr," \
  > Makefile
-make linux
+%{__make} linux
 
 %install
 rm -rf $RPM_BUILD_ROOT
