@@ -6,12 +6,12 @@
 Summary:	Power management software for APC UPS hardware
 Summary(pl):	Oprogramowanie do zarz±dzania energi± dla UPS-ów APC
 Name:		apcupsd
-Version:	3.10.16
+Version:	3.10.17
 Release:	1
 License:	GPL v2
 Group:		Networking/Daemons
 Source0:	http://dl.sourceforge.net/apcupsd/%{name}-%{version}.tar.gz
-# Source0-md5:	07de8f7d7488b6ef91f128f51713f4ea
+# Source0-md5:	2a7dab7bebac0912d683f5a14fb4e291
 Source1:	%{name}.init
 Source2:	%{name}.logrotate
 Source3:	%{name}.sysconfig
@@ -106,8 +106,8 @@ fi
 %doc ChangeLog Developers doc/{README.apcaccess,README.solaris}
 %{_mandir}/man8/apcupsd.*
 %attr(755,root,root) %{_sbindir}/*
-%attr(640,root,root) %config(noreplace) %verify(not md5 size mtime) %{_sysconfdir}/apcupsd.conf
-%attr(640,root,root) %config(noreplace) %verify(not md5 size mtime) /etc/sysconfig/apcupsd
+%attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/apcupsd.conf
+%attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/apcupsd
 %attr(754,root,root) %{_sysconfdir}/apccontrol
 %attr(754,root,root) %{_sysconfdir}/changeme
 %attr(754,root,root) %{_sysconfdir}/commfailure
@@ -118,8 +118,8 @@ fi
 %attr(754,root,root) %{_sysconfdir}/onbattery
 %attr(754,root,root) /etc/rc.d/init.d/apcupsd
 %attr(754,root,root) /etc/rc.d/init.d/halt
-%attr(640,root,root) %config(noreplace) %verify(not md5 size mtime) /etc/logrotate.d/apcupsd
-%dir /etc/apcupsd
+%attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/logrotate.d/apcupsd
+%dir %{_sysconfdir}
 %dir /var/lib/apcupsd
 %attr(640,root,root) %ghost /var/log/apcupsd.events
 %attr(640,root,root) %ghost /var/lib/apcupsd/apcupsd.status
