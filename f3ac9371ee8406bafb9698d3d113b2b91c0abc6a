@@ -1,0 +1,9 @@
+- cleanup
+- macros
+- striping binaries
+- gziping docs
+- CVS tags
+- FHS 2.0
+
+* Wed Oct 13 1999 Wojciech "sas" Ciêciwa <cieciwa@alpha.zarz.agh.edu.pl>
+- build rpm.
