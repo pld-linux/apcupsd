@@ -13,7 +13,6 @@ Source0:	http://dl.sourceforge.net/apcupsd/%{name}-%{version}.tar.gz
 # Source0-md5:	4c35774d587c54276cf03926768ad551
 Source1:	%{name}.init
 Source2:	%{name}.logrotate
-Source10:	%{name}-rc.d-halt
 Patch0:		%{name}-configure.patch
 URL:		http://www.apcupsd.com/
 BuildRequires:	autoconf
@@ -39,7 +38,7 @@ zasilania.
 
 %prep
 %setup -q
-%patch0 -p1	
+%patch0 -p1
 
 %build
 cd autoconf
@@ -47,13 +46,13 @@ cd autoconf
 cp -f ./configure ..
 cd ..
 %configure \
-    --with-log-dir=%{_var}/log \
-    --with-stat-dir=%{_var}/lib/apcupsd \
+	--with-log-dir=%{_var}/log \
+	--with-stat-dir=%{_var}/lib/apcupsd \
 %if %{with usb}
-    --enable-usb \
-    --with-serial-dev=/dev/usb/hiddev[0-15] \
-    --with-upstype=usb \
-    --with-upscable=usb
+	--enable-usb \
+	--with-serial-dev=/dev/usb/hiddev[0-15] \
+	--with-upstype=usb \
+	--with-upscable=usb
 %endif
 
 %{__make}
@@ -65,41 +64,37 @@ install -d $RPM_BUILD_ROOT/etc/{apcupsd,logrotate.d,rc.d/init.d} \
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
-install %{SOURCE10} $RPM_BUILD_ROOT/etc/rc.d/init.d/halt-apcupsd
+
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/apcupsd
 install %{SOURCE2} $RPM_BUILD_ROOT/etc/logrotate.d/apcupsd
 
 touch $RPM_BUILD_ROOT/var/log/apcupsd.events
 touch $RPM_BUILD_ROOT/var/lib/apcupsd/apcupsd.status
 
+cat > $RPM_BUILD_ROOT/etc/rc.d/init.d/halt << EOF
+#!/bin/sh
+/etc/rc.d/init.d/apcupsd powerdown
+EOF
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
 %post
 if [ "$1" = "1" ]; then
-    /sbin/chkconfig --add apcupsd
-    if [ -e /etc/rc.d/init.d/halt ]; then
-	mv -f /etc/rc.d/init.d/halt /etc/rc.d/init.d/halt.rpmorig
-    fi
-    ln -s /etc/rc.d/init.d/halt-apcupsd /etc/rc.d/init.d/halt
+	/sbin/chkconfig --add apcupsd
 fi
-
 if [ -f /var/lock/subsys/apcupsd ]; then
-    /etc/rc.d/init.d/apcupsd restart >&2
+        /etc/rc.d/init.d/apcupsd restart >&2
 else
-    echo "Run \"/etc/rc.d/init.d/apcupsd start\" to start apcupsd daemon."
+	echo "Run \"/etc/rc.d/init.d/apcupsd start\" to start apcupsd daemon."
 fi
 
 %preun
 if [ "$1" = "0" ]; then
-    if [ -f /var/lock/subsys/apcupsd ]; then
-	/etc/rc.d/init.d/apcupsd stop >&2
-    fi
-    rm -f /etc/rc.d/init.d/halt
-    if [ -e /etc/rc.d/init.d/halt.rpmorig ]; then
-	mv -f /etc/rc.d/init.d/halt /etc/rc.d/init.d/halt.rpmorig
-    fi
-    /sbin/chkconfig --del apcupsd
+	if [ -f /var/lock/subsys/apcupsd ]; then
+		/etc/rc.d/init.d/apcupsd stop >&2
+	fi
+/sbin/chkconfig --del apcupsd
 fi
 
 %files
@@ -117,7 +112,7 @@ fi
 %attr(754,root,root) %{_sysconfdir}/mastertimeout
 %attr(754,root,root) %{_sysconfdir}/onbattery
 %attr(754,root,root) /etc/rc.d/init.d/apcupsd
-%attr(754,root,root) /etc/rc.d/init.d/halt-apcupsd
+%attr(754,root,root) /etc/rc.d/init.d/halt
 %attr(640,root,root) /etc/logrotate.d/apcupsd
 %dir /var/lib/apcupsd
 %attr(640,root,root) %ghost /var/log/apcupsd.events
