@@ -10,7 +10,7 @@ License:	GPL v2
 Group:		Networking/Daemons
 Source0:	http://dl.sourceforge.net/apcupsd/%{name}-%{version}.tar.gz
 # Source0-md5:	b69ccf4f4196582ab3e26bf6af937610
-Patch0:		%{name}-paths.patch
+Patch0:		%{name}-paths.patch 
 Patch1:		%{name}-pld.patch
 #Patch1:	apcups-makefile.patch
 #Patch2:	%{name}-Makefile-fix.patch
@@ -37,21 +37,23 @@ zasilania.
 
 %prep
 %setup -q
-#%patch0 -p1	-- configure should be patched to move files from /var/log to /var/lib
-#%patch1 -p1	-- probably should be updated
+#%patch0 -p1	
+#-- configure should be patched to move files from /var/log to /var/lib
+#%patch1 -p1	
+#-- probably should be updated
 #%patch2 -p0
 
 %build
-%configure2_13
+%configure
 %{__make}
 
 %install
 rm -rf $RPM_BUILD_ROOT
-#install -d $RPM_BUILD_ROOT{/etc/rc.d/init.d,/var/log,/var/lib/apcupsd}
+install -d $RPM_BUILD_ROOT{/etc/rc.d/init.d,/var/log,/var/lib/apcupsd,\
+/etc/apcupsd/}
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
-mkdir -p $RPM_BUILD_ROOT/etc/rc.d/init.d
 install platforms/unknown/apcupsd $RPM_BUILD_ROOT/etc/rc.d/init.d/apcupsd
 #install platforms/pld/apcupsd  $RPM_BUILD_ROOT/etc/rc.d/init.d/apcupsd
 
@@ -99,7 +101,7 @@ fi
 %{_mandir}/man8/apcupsd.*
 %attr(755,root,root) %{_sbindir}/*
 #%attr(755,root,root) %config /sbin/powersc
-%attr(640,root,root) %config(noreplace) %{_sysconfdir}/apcupsd.conf
+%attr(640,root,root) %config(noreplace) %{_sysconfdir}/*
 %attr(754,root,root) /etc/rc.d/init.d/apcupsd
 %ghost /var/log/apcupsd.log
 %ghost /var/lib/apcupsd/apcupsd.status
