@@ -70,7 +70,7 @@ cp -f /etc/rc.d/init.d/halt /etc/rc.d/init.d/halt.rpmorig
 #     -e '\
 # See if this is a powerfail situation.\
 
-echo ' 
+echo '
 if [ -f /etc/apcupsd/powerfail ]; then\
   echo "APCUPSD to the Rescue!"\
   echo\
@@ -90,8 +90,8 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%doc doc.tar.gz 
-%doc ChangeLog 
+%doc doc.tar.gz
+%doc ChangeLog
 %{_mandir}/man8/apcupsd.*
 %attr(755,root,root) %{_sbindir}/*
 %attr(755,root,root) %{_bindir}/*
