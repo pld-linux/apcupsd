@@ -12,7 +12,6 @@ License:	GPL v2
 Group:		Networking/Daemons
 Source0:	http://dl.sourceforge.net/apcupsd/%{name}-%{version}.tar.gz
 # Source0-md5:	07de8f7d7488b6ef91f128f51713f4ea
-# Source0-size:	3858266
 Source1:	%{name}.init
 Source2:	%{name}.logrotate
 Source3:	%{name}.sysconfig
@@ -53,9 +52,7 @@ cd ..
 %configure \
 	--with-log-dir=%{_var}/log \
 	--with-stat-dir=%{_var}/lib/apcupsd \
-%if %{with test}
-	--enable-test \
-%endif
+	%{?with_test:--enable-test} \
 %if %{with usb}
 	--enable-usb \
 	--with-serial-dev=/dev/usb/hiddev[0-15] \
@@ -110,7 +107,7 @@ fi
 %{_mandir}/man8/apcupsd.*
 %attr(755,root,root) %{_sbindir}/*
 %attr(640,root,root) %config(noreplace) %verify(not md5 size mtime) %{_sysconfdir}/apcupsd.conf
-%attr(640,root,root) %config(noreplace) /etc/sysconfig/apcupsd
+%attr(640,root,root) %config(noreplace) %verify(not md5 size mtime) /etc/sysconfig/apcupsd
 %attr(754,root,root) %{_sysconfdir}/apccontrol
 %attr(754,root,root) %{_sysconfdir}/changeme
 %attr(754,root,root) %{_sysconfdir}/commfailure
