@@ -102,7 +102,7 @@ fi
 %doc ChangeLog Developers doc/{README.apcaccess,README.solaris}
 %{_mandir}/man8/apcupsd.*
 %attr(755,root,root) %{_sbindir}/*
-%attr(640,root,root) %config(noreplace) %{_sysconfdir}/apcupsd.conf
+%attr(640,root,root) %config(noreplace) %verify(not md5 size mtime) %{_sysconfdir}/apcupsd.conf
 %attr(754,root,root) %{_sysconfdir}/apccontrol
 %attr(754,root,root) %{_sysconfdir}/changeme
 %attr(754,root,root) %{_sysconfdir}/commfailure
