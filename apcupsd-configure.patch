@@ -1,0 +1,89 @@
+diff -urN apcupsd-3.10.12.orig/autoconf/acconfig.h apcupsd-3.10.12.new/autoconf/acconfig.h
+--- apcupsd-3.10.12.orig/autoconf/acconfig.h	2003-03-08 16:14:52.000000000 +0100
++++ apcupsd-3.10.12.new/autoconf/acconfig.h	2004-04-08 12:40:17.892974408 +0200
+@@ -97,6 +97,9 @@
+ /* Define the default "log" files directory. */
+ #undef LOGDIR
+ 
++/* Define the default "status" files directory. */
++#undef STATDIR
++
+ /* Define the default serial port lock directory */
+ #undef LOCKDIR
+ 
+diff -urN apcupsd-3.10.12.orig/autoconf/configure.in apcupsd-3.10.12.new/autoconf/configure.in
+--- apcupsd-3.10.12.orig/autoconf/configure.in	2004-03-04 11:48:42.000000000 +0100
++++ apcupsd-3.10.12.new/autoconf/configure.in	2004-04-08 13:13:47.029539224 +0200
+@@ -1176,10 +1176,19 @@
+ 	fi
+ done
+ 
+-# Find the default directory to put the apcupsd.events and apcupsd.status files
++# Find the default directory to put the apcupsd.events file
+ for LOGDIR in "/var/log" "/etc/apcupsd"
+ do
+-	if test -d $LOGDIR 
++	if test -d $LOGDIR
++	then
++		break;
++	fi
++done
++
++# Find the default directory to put the apcupsd.status file
++for STATDIR in "/var/log" "/etc/apcupsd"
++do
++	if test -d $STATDIR
+ 	then
+ 		break;
+ 	fi
+@@ -1479,11 +1488,18 @@
+ )
+ # now allow user to specify LOGDIR
+ AC_ARG_WITH(log-dir,
+-	[  --with-log-dir=DIR	   Specify EVENTS and STATUS directory (default is OS dependent)],
++	[  --with-log-dir=DIR	   Specify EVENTS directory (default is OS dependent)],
+ 	[
+ 		LOGDIR="$withval";
+ 	]
+ )
++# now allow user to specify STATDIR
++AC_ARG_WITH(stat-dir,
++	[  --with-stat-dir=DIR	   Specify STATUS directory (default is OS dependent)],
++	[
++		STATDIR="$withval";
++	]
++)
+ # now allow user to specify LOCKDIR
+ AC_ARG_WITH(lock-dir,
+ 	[  --with-lock-dir=DIR	   Specify serial port lock directory (default is OS dependent)],
+@@ -1549,6 +1565,8 @@
+ AC_SUBST(PIDDIR)
+ AC_DEFINE_UNQUOTED(LOGDIR, "$LOGDIR")
+ AC_SUBST(LOGDIR)
++AC_DEFINE_UNQUOTED(STATDIR, "$STATDIR")
++AC_SUBST(STATDIR)
+ AC_DEFINE_UNQUOTED(NOLOGDIR, "$nologdir")
+ AC_SUBST(nologdir)
+ AC_DEFINE_UNQUOTED(PWRFAILDIR, "$PWRFAILDIR")
+@@ -1709,7 +1727,8 @@
+   Install man files:	      ${mandir}
+   Nologin file in:	      ${nologdir}
+   PID directory:	      ${PIDDIR}
+-  LOG dir (events, status)    ${LOGDIR}
++  LOG dir (events)            ${LOGDIR}
++  STATUS dir (status)         ${STATDIR}
+   LOCK dir (for serial port)  ${LOCKDIR}
+   Power Fail dir	      ${PWRFAILDIR}
+   Compiler:		      ${CC} ${CCVERSION}
+diff -urN apcupsd-3.10.12.orig/platforms/etc/apcupsd.conf.in apcupsd-3.10.12.new/platforms/etc/apcupsd.conf.in
+--- apcupsd-3.10.12.orig/platforms/etc/apcupsd.conf.in	2003-11-26 16:54:47.000000000 +0100
++++ apcupsd-3.10.12.new/platforms/etc/apcupsd.conf.in	2004-04-08 13:27:59.542937488 +0200
+@@ -217,7 +217,7 @@
+ STATTIME 0
+ #
+ # Location of STATUS file (written to only if STATTIME is non-zero)
+-STATFILE @LOGDIR@/apcupsd.status
++STATFILE @STATDIR@/apcupsd.status
+ #
+ #
+ # LOGSTATS [ on | off ] on enables, off disables
