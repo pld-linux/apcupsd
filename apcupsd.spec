@@ -40,7 +40,7 @@ zasilania.
 #%patch2 -p0
 
 %build
-%configure
+%configure2_13
 %{__make}
 
 %install
