@@ -1,4 +1,5 @@
 Summary:	Power management software for APC UPS hardware
+Summary(pl):	Oprogramowanie do zarz±dzania energi± dla UPS-ów APC
 Name:		apcupsd
 Version:	3.8.1
 Release:	3
@@ -12,6 +13,7 @@ Patch1:		%{name}-pld.patch
 #Patch1:	apcups-makefile.patch
 #Patch2:	%{name}-Makefile-fix.patch
 URL:		http://www.sibbald.com/apcupsd/
+Prereq:		chkconfig
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 #Icon:		apcupsd-logo.xpm
 
@@ -23,6 +25,13 @@ computer/server to run during power problems for a specified length of
 time or the life of the batteries in your BackUPS, BackUPS Pro,
 SmartUPS v/s, or SmartUPS, and then properly executes a controlled
 shutdown during an extended power failure.
+
+%description -l pl
+Oprogramowanie do zarz±dzania energi± dla UPS-ów APC. Pozwala
+komputerowi dzia³aæ po awarii zasilania przez okre¶lony czas lub czas
+¿ycia akumulatorów w BackUPS, BackUPS Pro, SmartUPS v/s, SmartUPS oraz
+odpowiednio uruchamia kontrolowany shutdown przy d³u¿szej awarii
+zasilania.
 
 %prep
 %setup -q
@@ -51,7 +60,7 @@ touch ${RPM_BUILD_ROOT}/var/lib/apcupsd/apcupsd.status
 touch ${RPM_BUILD_ROOT}/var/lib/apcupsd/apcupsd.events
 
 %clean
-rm -rf ${RPM_BUILD_ROOT}
+rm -rf $RPM_BUILD_ROOT
 
 %post
 /sbin/ldconfig
@@ -76,9 +85,10 @@ fi\
 #' /etc/rc.d/init.d/halt.rpmorig > /etc/rc.d/init.d/halt
 #fi
 
-
 %preun
-chkconfig --del apcupsd
+if [ "$1" = "0" ]; then
+	chkconfig --del apcupsd
+fi
 
 %files
 %defattr(644,root,root,755)
