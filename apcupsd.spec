@@ -41,8 +41,8 @@ install -d $RPM_BUILD_ROOT{%{_sbindir},%{_bindir},%{_mandir}/man8,%{_sysconfdir}
 install apcupsd apcnetd $RPM_BUILD_ROOT%{_sbindir}
 install apcaccess $RPM_BUILD_ROOT%{_bindir}
 install etc/* $RPM_BUILD_ROOT%{_sysconfdir}
-install distributions/redhat/apccontrol.sh $RPM_BUILD_ROOT%{_sysconfdir}/apccontrol
-install distributions/redhat/apcupsd  $RPM_BUILD_ROOT/etc/rc.d/init.d/apcupsd
+install distributions/pld/apccontrol.sh $RPM_BUILD_ROOT%{_sysconfdir}/apccontrol
+install distributions/pld/apcupsd  $RPM_BUILD_ROOT/etc/rc.d/init.d/apcupsd
 install doc/apcupsd.man $RPM_BUILD_ROOT%{_mandir}/man8
 tar czf doc.tar.gz doc
 
