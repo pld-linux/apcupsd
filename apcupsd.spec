@@ -1,20 +1,22 @@
+# TODO:
+# - update paths and pld patches
+# - avoid messing in halt script in %post
 Summary:	Power management software for APC UPS hardware
 Summary(pl):	Oprogramowanie do zarz±dzania energi± dla UPS-ów APC
 Name:		apcupsd
-Version:	3.8.1
-Release:	3
+Version:	3.10.5
+Release:	0.1
 License:	GPL v2
 Group:		Networking/Daemons
-Source0:	http://www.sibbald.com/apcupsd/download/%{name}-%{version}.tar.gz
+Source0:	http://dl.sourceforge.net/apcupsd/%{name}-%{version}.tar.gz
 Patch0:		%{name}-paths.patch
 Patch1:		%{name}-pld.patch
 #Patch1:	apcups-makefile.patch
 #Patch2:	%{name}-Makefile-fix.patch
-URL:		http://www.sibbald.com/apcupsd/
-Requires(post,preun);	/sbin/chkconfig
+URL:		http://www.apcupsd.com/
+Requires(post,preun):	/sbin/chkconfig
 Requires(post):	fileutils
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
-#Icon:		apcupsd-logo.xpm
 
 %define		_sysconfdir	/etc/apcupsd
 
@@ -34,8 +36,8 @@ zasilania.
 
 %prep
 %setup -q
-%patch0 -p1
-%patch1 -p1
+#%patch0 -p1	-- configure should be patched to move files from /var/log to /var/lib
+#%patch1 -p1	-- probably should be updated
 #%patch2 -p0
 
 %build
@@ -44,19 +46,17 @@ zasilania.
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{%{_sbindir},%{_bindir},%{_mandir}/man8,%{_sysconfdir},/etc/rc.d/init.d,/var/log,/var/lib/apcupsd}
+#install -d $RPM_BUILD_ROOT{/etc/rc.d/init.d,/var/log,/var/lib/apcupsd}
 
-install apcupsd apcnetd $RPM_BUILD_ROOT%{_sbindir}
-install apcaccess $RPM_BUILD_ROOT%{_bindir}
-install etc/* $RPM_BUILD_ROOT%{_sysconfdir}
-install distributions/pld/apccontrol.sh $RPM_BUILD_ROOT%{_sysconfdir}/apccontrol
-install distributions/pld/apcupsd  $RPM_BUILD_ROOT/etc/rc.d/init.d/apcupsd
-install doc/apcupsd.man $RPM_BUILD_ROOT%{_mandir}/man8
-tar czf doc.tar.gz doc
+%{__make} install \
+	DESTDIR=$RPM_BUILD_ROOT
 
-touch ${RPM_BUILD_ROOT}/var/log/apcupsd.log
-touch ${RPM_BUILD_ROOT}/var/lib/apcupsd/apcupsd.status
-touch ${RPM_BUILD_ROOT}/var/lib/apcupsd/apcupsd.events
+install platforms/redhat/apcupsd $RPM_BUILD_ROOT/etc/rc.d/init.d/apcupsd
+#install platforms/pld/apcupsd  $RPM_BUILD_ROOT/etc/rc.d/init.d/apcupsd
+
+touch $RPM_BUILD_ROOT/var/log/apcupsd.log
+touch $RPM_BUILD_ROOT/var/lib/apcupsd/apcupsd.status
+touch $RPM_BUILD_ROOT/var/lib/apcupsd/apcupsd.events
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -91,11 +91,9 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%doc doc.tar.gz
-%doc ChangeLog
+%doc ChangeLog Developers doc/{README.apcaccess,developers_manual,home-page,logo,manual}
 %{_mandir}/man8/apcupsd.*
 %attr(755,root,root) %{_sbindir}/*
-%attr(755,root,root) %{_bindir}/*
 #%attr(755,root,root) %config /sbin/powersc
 %attr(640,root,root) %config(noreplace) %{_sysconfdir}/apcupsd.conf
 %attr(754,root,root) /etc/rc.d/init.d/apcupsd
