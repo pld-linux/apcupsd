@@ -67,7 +67,7 @@ cd ..
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT/etc/{apcupsd,logrotate.d,rc.d/init.d} \
+install -d $RPM_BUILD_ROOT/etc/{apcupsd,logrotate.d,rc.d/init.d,sysconfig} \
 	$RPM_BUILD_ROOT/var/{log,lib/apcupsd}
 
 %{__make} install \
