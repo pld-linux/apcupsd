@@ -56,12 +56,12 @@ cd ..
 	--with-log-dir=%{_var}/log \
 	--with-stat-dir=%{_var}/lib/apcupsd \
 	%{?with_test:--enable-test} \
-	%{?with_net:--enable-net} \
+%if %{?with_net}
+	--enable-net \
+	--enable-master-slave \
+%endif	
 	%{?with_snmp:--enable-snmp} \
-%if %{with usb}
-	--enable-usb \
-	--with-serial-dev=/dev/usb/hiddev[0-15] \
-%endif
+	%{with usb:--enable-usb}
 
 %{__make}
 
