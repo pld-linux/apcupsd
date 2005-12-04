@@ -1,8 +1,9 @@
 #
 # Conditional build:
 %bcond_without	test	# without TEST support
-%bcond_with	usb	# with USB support
-%bcond_with	net	# with network support
+%bcond_without	usb	# with USB support
+%bcond_without	net	# with network support
+%bcond_without	snmp	# with SNMP support
 #
 Summary:	Power management software for APC UPS hardware
 Summary(pl):	Oprogramowanie do zarz±dzania energi± dla UPS-ów APC
@@ -55,11 +56,10 @@ cd ..
 	--with-stat-dir=%{_var}/lib/apcupsd \
 	%{?with_test:--enable-test} \
 	%{?with_net:--enable-net} \
+	%{?with_net:--enable-snmp} \
 %if %{with usb}
 	--enable-usb \
 	--with-serial-dev=/dev/usb/hiddev[0-15] \
-	--with-upstype=usb \
-	--with-upscable=usb
 %endif
 
 %{__make}
