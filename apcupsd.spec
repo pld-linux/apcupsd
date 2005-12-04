@@ -61,7 +61,7 @@ cd ..
 	--enable-master-slave \
 %endif	
 	%{?with_snmp:--enable-snmp} \
-	%{?with usb:--enable-usb}
+	%{?with_usb:--enable-usb}
 
 %{__make}
 
