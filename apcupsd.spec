@@ -21,7 +21,7 @@ Patch0:		%{name}-configure.patch
 URL:		http://www.apcupsd.com/
 BuildRequires:	autoconf
 BuildRequires:	automake
-%{?with_snmp:BuildRequires: net-snmp-devel}	
+%{?with_snmp:BuildRequires: net-snmp-devel}
 Requires(post):	fileutils
 Requires(post,preun):	/sbin/chkconfig
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -59,7 +59,7 @@ cd ..
 %if %{?with_net}
 	--enable-net \
 	--enable-master-slave \
-%endif	
+%endif
 	%{?with_snmp:--enable-snmp} \
 	%{?with_usb:--enable-usb}
 
