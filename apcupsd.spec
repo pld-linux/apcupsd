@@ -1,15 +1,15 @@
 #
 # Conditional build:
 %bcond_without	test	# without TEST support
-%bcond_without	usb	# with USB support
-%bcond_without	net	# with network support
-%bcond_without	snmp	# with SNMP support
+%bcond_without	usb	# without USB support
+%bcond_without	net	# without network support
+%bcond_with	snmp	# with SNMP support
 #
 Summary:	Power management software for APC UPS hardware
 Summary(pl):	Oprogramowanie do zarz±dzania energi± dla UPS-ów APC
 Name:		apcupsd
 Version:	3.10.18
-Release:	2
+Release:	3
 License:	GPL v2
 Group:		Networking/Daemons
 Source0:	http://dl.sourceforge.net/apcupsd/%{name}-%{version}.tar.gz
@@ -21,6 +21,7 @@ Patch0:		%{name}-configure.patch
 URL:		http://www.apcupsd.com/
 BuildRequires:	autoconf
 BuildRequires:	automake
+%{?with_snmp:BuildRequires: net-snmp-devel}	
 Requires(post):	fileutils
 Requires(post,preun):	/sbin/chkconfig
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -56,7 +57,7 @@ cd ..
 	--with-stat-dir=%{_var}/lib/apcupsd \
 	%{?with_test:--enable-test} \
 	%{?with_net:--enable-net} \
-	%{?with_net:--enable-snmp} \
+	%{?with_snmp:--enable-snmp} \
 %if %{with usb}
 	--enable-usb \
 	--with-serial-dev=/dev/usb/hiddev[0-15] \
