@@ -21,7 +21,8 @@ Patch0:		%{name}-configure.patch
 URL:		http://www.apcupsd.com/
 BuildRequires:	autoconf
 BuildRequires:	automake
-%{?with_snmp:BuildRequires: net-snmp-devel}
+%{?with_snmp:BuildRequires:	net-snmp-devel}
+Requires:	rc-scripts
 Requires(post):	fileutils
 Requires(post,preun):	/sbin/chkconfig
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -50,13 +51,13 @@ zasilania.
 cd autoconf
 cp -f /usr/share/automake/config.sub .
 %{__autoconf}
-cp -f ./configure ..
+cp -f configure ..
 cd ..
 %configure \
 	--with-log-dir=%{_var}/log \
 	--with-stat-dir=%{_var}/lib/apcupsd \
 	%{?with_test:--enable-test} \
-%if %{?with_net}
+%if %{with net}
 	--enable-net \
 	--enable-master-slave \
 %endif
@@ -101,13 +102,12 @@ if [ "$1" = "0" ]; then
 	if [ -f /var/lock/subsys/apcupsd ]; then
 		/etc/rc.d/init.d/apcupsd stop >&2
 	fi
-/sbin/chkconfig --del apcupsd
+	/sbin/chkconfig --del apcupsd
 fi
 
 %files
 %defattr(644,root,root,755)
 %doc ChangeLog Developers doc/{README.apcaccess,README.solaris}
-%{_mandir}/man8/apcupsd.*
 %attr(755,root,root) %{_sbindir}/*
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/apcupsd.conf
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/apcupsd
@@ -126,3 +126,4 @@ fi
 %dir /var/lib/apcupsd
 %attr(640,root,root) %ghost /var/log/apcupsd.events
 %attr(640,root,root) %ghost /var/lib/apcupsd/apcupsd.status
+%{_mandir}/man8/apcupsd.*
