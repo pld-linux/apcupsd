@@ -22,9 +22,9 @@ URL:		http://www.apcupsd.com/
 BuildRequires:	autoconf
 BuildRequires:	automake
 %{?with_snmp:BuildRequires:	net-snmp-devel}
-Requires:	rc-scripts
 Requires(post):	fileutils
 Requires(post,preun):	/sbin/chkconfig
+Requires:	rc-scripts
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_sysconfdir	/etc/apcupsd
