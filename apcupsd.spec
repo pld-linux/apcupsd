@@ -8,12 +8,12 @@
 Summary:	Power management software for APC UPS hardware
 Summary(pl):	Oprogramowanie do zarz±dzania energi± dla UPS-ów APC
 Name:		apcupsd
-Version:	3.10.18
-Release:	3
+Version:	3.12.0
+Release:	0.1
 License:	GPL v2
 Group:		Networking/Daemons
 Source0:	http://dl.sourceforge.net/apcupsd/%{name}-%{version}.tar.gz
-# Source0-md5:	64104a1fface0253e77318ca84948bac
+# Source0-md5:	b399549eb1c18ff813478f402876ea7c
 Source1:	%{name}.init
 Source2:	%{name}.logrotate
 Source3:	%{name}.sysconfig
@@ -45,7 +45,7 @@ zasilania.
 
 %prep
 %setup -q
-%patch0 -p1
+#%patch0 -p1
 
 %build
 cd autoconf
@@ -107,7 +107,7 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%doc ChangeLog Developers doc/{README.apcaccess,README.solaris}
+%doc ChangeLog Developers
 %attr(755,root,root) %{_sbindir}/*
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/apcupsd.conf
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/apcupsd
@@ -115,10 +115,11 @@ fi
 %attr(754,root,root) %{_sysconfdir}/changeme
 %attr(754,root,root) %{_sysconfdir}/commfailure
 %attr(754,root,root) %{_sysconfdir}/commok
-%attr(754,root,root) %{_sysconfdir}/mainsback
+#%attr(754,root,root) %{_sysconfdir}/mainsback
 %attr(754,root,root) %{_sysconfdir}/masterconnect
 %attr(754,root,root) %{_sysconfdir}/mastertimeout
 %attr(754,root,root) %{_sysconfdir}/onbattery
+%attr(754,root,root) %{_sysconfdir}/offbattery
 %attr(754,root,root) /etc/rc.d/init.d/apcupsd
 %attr(754,root,root) /etc/rc.d/init.d/halt
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/logrotate.d/apcupsd
