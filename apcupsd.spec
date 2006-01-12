@@ -70,7 +70,6 @@ cd ..
 %if %{with cgi}
 	--enable-cgi \
 	--with-cgi-bin=/home/services/httpd/cgi-bin \
-	--with-css-dir=/home/services/httpd/cgi-bin \
 %endif
 	%{?with_test:--enable-test} \
 %if %{with net}
