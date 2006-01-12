@@ -137,10 +137,9 @@ fi
 %attr(754,root,root) %{_sysconfdir}/onbattery
 %attr(754,root,root) %{_sysconfdir}/offbattery
 %if %{with cgi}
-%attr(754,root,root) %{_sysconfdir}/hosts.conf
-%attr(754,root,root) %{_sysconfdir}/multimon.conf
-#move to cgi-bin ??
-%attr(754,root,root) %{_sysconfdir}/*.css
+%attr(644,root,root) %{_sysconfdir}/hosts.conf
+%attr(644,root,root) %{_sysconfdir}/multimon.conf
+%attr(644,root,root) %{_sysconfdir}/apcupsd.css
 %endif
 %attr(754,root,root) /etc/rc.d/init.d/apcupsd
 %attr(754,root,root) /etc/rc.d/init.d/halt
