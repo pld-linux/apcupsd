@@ -4,6 +4,7 @@
 %bcond_without	usb	# without USB support
 %bcond_without	net	# without network support
 %bcond_with	snmp	# with SNMP support
+%bcond_with	cgi	# with CGI program support
 #
 Summary:	Power management software for APC UPS hardware
 Summary(pl):	Oprogramowanie do zarz±dzania energi± dla UPS-ów APC
@@ -28,6 +29,7 @@ Requires:	rc-scripts
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_sysconfdir	/etc/apcupsd
+%define         _cgidir        /home/services/httpd/cgi-bin
 
 %description
 UPS power management under Linux for APCC Products. It allows your
@@ -43,6 +45,14 @@ komputerowi dzia³aæ po awarii zasilania przez okre¶lony czas lub czas
 odpowiednio uruchamia kontrolowany shutdown przy d³u¿szej awarii
 zasilania.
 
+%package cgi 
+Summary:        upsstats is a CGI program
+Group:          Applications/Networking
+Requires:       webserver
+
+%description cgi
+upsstats is a CGI program
+
 %prep
 %setup -q
 #%patch0 -p1
@@ -53,9 +63,15 @@ cp -f /usr/share/automake/config.sub .
 %{__autoconf}
 cp -f configure ..
 cd ..
+
 %configure \
 	--with-log-dir=%{_var}/log \
 	--with-stat-dir=%{_var}/lib/apcupsd \
+%if %{with cgi}
+	--enable-cgi \
+	--with-cgi-bin=/home/services/httpd/cgi-bin \
+	--with-css-dir=/home/services/httpd/cgi-bin \
+%endif
 	%{?with_test:--enable-test} \
 %if %{with net}
 	--enable-net \
@@ -120,6 +136,12 @@ fi
 %attr(754,root,root) %{_sysconfdir}/mastertimeout
 %attr(754,root,root) %{_sysconfdir}/onbattery
 %attr(754,root,root) %{_sysconfdir}/offbattery
+%if %{with cgi}
+%attr(754,root,root) %{_sysconfdir}/hosts.conf
+%attr(754,root,root) %{_sysconfdir}/multimon.conf
+#move to cgi-bin ??
+%attr(754,root,root) %{_sysconfdir}/*.css
+%endif
 %attr(754,root,root) /etc/rc.d/init.d/apcupsd
 %attr(754,root,root) /etc/rc.d/init.d/halt
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/logrotate.d/apcupsd
@@ -128,3 +150,7 @@ fi
 %attr(640,root,root) %ghost /var/log/apcupsd.events
 %attr(640,root,root) %ghost /var/lib/apcupsd/apcupsd.status
 %{_mandir}/man8/apcupsd.*
+
+%files cgi
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_cgidir}/*.cgi
