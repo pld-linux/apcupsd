@@ -47,12 +47,17 @@ zasilania.
 
 %package cgi 
 Summary:        upsstats - Web-based UPS status viewer
+Summary(pl):	upsstats - oparta na WWW przegl±darka stanu UPS-a
 Group:          Applications/Networking
 Requires:       webserver
 
 %description cgi
-upsstats.cgi builds a lightweight web page containing basic status
-information about a UPS
+upsstats.cgi builds a lightweight web page containing basic UPS status
+information.
+
+%description cgi -l pl
+upsstats.cgi tworzy lekk± stronê WWW zawieraj±c± podstawowe informacje
+o stanie UPS-a.
 
 %prep
 %setup -q
@@ -137,9 +142,9 @@ fi
 %attr(754,root,root) %{_sysconfdir}/onbattery
 %attr(754,root,root) %{_sysconfdir}/offbattery
 %if %{with cgi}
-%attr(644,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/hosts.conf
-%attr(644,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/multimon.conf
-%attr(644,root,root) %{_sysconfdir}/apcupsd.css
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/hosts.conf
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/multimon.conf
+%{_sysconfdir}/apcupsd.css
 %endif
 %attr(754,root,root) /etc/rc.d/init.d/apcupsd
 %attr(754,root,root) /etc/rc.d/init.d/halt
