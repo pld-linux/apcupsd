@@ -3,8 +3,8 @@
 %bcond_without	test	# without TEST support
 %bcond_without	usb	# without USB support
 %bcond_without	net	# without network support
+%bcond_without	cgi	# with CGI program support
 %bcond_with	snmp	# with SNMP support
-%bcond_with	cgi	# with CGI program support
 #
 Summary:	Power management software for APC UPS hardware
 Summary(pl):	Oprogramowanie do zarz±dzania energi± dla UPS-ów APC
@@ -46,12 +46,13 @@ odpowiednio uruchamia kontrolowany shutdown przy d³u¿szej awarii
 zasilania.
 
 %package cgi 
-Summary:        upsstats is a CGI program
+Summary:        upsstats - Web-based UPS status viewer
 Group:          Applications/Networking
 Requires:       webserver
 
 %description cgi
-upsstats is a CGI program
+upsstats.cgi builds a lightweight web page containing basic status
+information about a UPS
 
 %prep
 %setup -q
@@ -136,8 +137,8 @@ fi
 %attr(754,root,root) %{_sysconfdir}/onbattery
 %attr(754,root,root) %{_sysconfdir}/offbattery
 %if %{with cgi}
-%attr(644,root,root) %{_sysconfdir}/hosts.conf
-%attr(644,root,root) %{_sysconfdir}/multimon.conf
+%attr(644,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/hosts.conf
+%attr(644,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/multimon.conf
 %attr(644,root,root) %{_sysconfdir}/apcupsd.css
 %endif
 %attr(754,root,root) /etc/rc.d/init.d/apcupsd
