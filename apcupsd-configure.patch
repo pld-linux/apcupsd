@@ -82,14 +82,14 @@ diff -urN apcupsd-3.10.13.orig/autoconf/acconfig.h apcupsd-3.10.13.new/autoconf/
    LOCK dir (for serial port)  ${LOCKDIR}
    Power Fail dir	      ${PWRFAILDIR}
    Compiler:		      ${CC} ${CCVERSION}
---- apcupsd-3.10.13.orig/platforms/etc/apcupsd.conf.in	2003-11-26 16:54:47.000000000 +0100
-+++ apcupsd-3.10.13.new/platforms/etc/apcupsd.conf.in	2004-05-22 19:11:36.654878456 +0200
-@@ -217,7 +217,7 @@
+--- apcupsd-3.12.1/platforms/etc/apcupsd.conf.in.orig	2005-12-31 00:26:41.000000000 +0100
++++ apcupsd-3.12.1/platforms/etc/apcupsd.conf.in	2006-01-24 13:45:20.000000000 +0100
+@@ -227,7 +227,7 @@
  STATTIME 0
- #
+ 
  # Location of STATUS file (written to only if STATTIME is non-zero)
 -STATFILE @LOGDIR@/apcupsd.status
 +STATFILE @STATDIR@/apcupsd.status
- #
- #
+ 
  # LOGSTATS [ on | off ] on enables, off disables
+ # Note! This generates a lot of output, so if         
