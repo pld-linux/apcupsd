@@ -10,7 +10,7 @@ Summary:	Power management software for APC UPS hardware
 Summary(pl):	Oprogramowanie do zarz±dzania energi± dla UPS-ów APC
 Name:		apcupsd
 Version:	3.12.2
-Release:	0.1
+Release:	1
 License:	GPL v2
 Group:		Networking/Daemons
 Source0:	http://dl.sourceforge.net/apcupsd/%{name}-%{version}.tar.gz
@@ -133,14 +133,14 @@ fi
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/apcupsd.conf
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/apcupsd
 %attr(754,root,root) %{_sysconfdir}/apccontrol
-%attr(754,root,root) %{_sysconfdir}/changeme
-%attr(754,root,root) %{_sysconfdir}/commfailure
-%attr(754,root,root) %{_sysconfdir}/commok
-#%attr(754,root,root) %{_sysconfdir}/mainsback
-%attr(754,root,root) %{_sysconfdir}/masterconnect
-%attr(754,root,root) %{_sysconfdir}/mastertimeout
-%attr(754,root,root) %{_sysconfdir}/onbattery
-%attr(754,root,root) %{_sysconfdir}/offbattery
+%attr(754,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/changeme
+%attr(754,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/commfailure
+%attr(754,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/commok
+#%attr(754,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/mainsback
+%attr(754,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/masterconnect
+%attr(754,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/mastertimeout
+%attr(754,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/onbattery
+%attr(754,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/offbattery
 %if %{with cgi}
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/hosts.conf
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/multimon.conf
