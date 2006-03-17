@@ -23,13 +23,14 @@ URL:		http://www.apcupsd.com/
 BuildRequires:	autoconf
 BuildRequires:	automake
 %{?with_snmp:BuildRequires:	net-snmp-devel}
+BuildRequires:	rpmbuild(macros) >= 1.268
 Requires(post):	fileutils
 Requires(post,preun):	/sbin/chkconfig
 Requires:	rc-scripts
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_sysconfdir	/etc/apcupsd
-%define         _cgidir        /home/services/httpd/cgi-bin
+%define		_cgidir		/home/services/httpd/cgi-bin
 
 %description
 UPS power management under Linux for APCC Products. It allows your
@@ -94,7 +95,7 @@ install -d $RPM_BUILD_ROOT/etc/{apcupsd,logrotate.d,rc.d/init.d,sysconfig} \
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
-
+        
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/apcupsd
 install %{SOURCE2} $RPM_BUILD_ROOT/etc/logrotate.d/apcupsd
 install %{SOURCE3} $RPM_BUILD_ROOT/etc/sysconfig/apcupsd
@@ -112,17 +113,11 @@ rm -rf $RPM_BUILD_ROOT
 
 %post
 /sbin/chkconfig --add apcupsd
-if [ -f /var/lock/subsys/apcupsd ]; then
-	/etc/rc.d/init.d/apcupsd restart >&2
-else
-	echo "Run \"/etc/rc.d/init.d/apcupsd start\" to start apcupsd daemon."
-fi
+%service apcupsd restart "apcupsd daemon"
 
 %preun
 if [ "$1" = "0" ]; then
-	if [ -f /var/lock/subsys/apcupsd ]; then
-		/etc/rc.d/init.d/apcupsd stop >&2
-	fi
+	%service apcupsd stop
 	/sbin/chkconfig --del apcupsd
 fi
 
