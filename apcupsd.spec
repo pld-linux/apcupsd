@@ -47,10 +47,10 @@ odpowiednio uruchamia kontrolowany shutdown przy d³u¿szej awarii
 zasilania.
 
 %package cgi 
-Summary:        upsstats - Web-based UPS status viewer
+Summary:	upsstats - Web-based UPS status viewer
 Summary(pl):	upsstats - oparta na WWW przegl±darka stanu UPS-a
-Group:          Applications/Networking
-Requires:       webserver
+Group:		Applications/Networking
+Requires:	webserver
 
 %description cgi
 upsstats.cgi builds a lightweight web page containing basic UPS status
