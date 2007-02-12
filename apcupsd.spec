@@ -7,7 +7,7 @@
 
 #
 Summary:	Power management software for APC UPS hardware
-Summary(pl):	Oprogramowanie do zarz±dzania energi± dla UPS-ów APC
+Summary(pl.UTF-8):   Oprogramowanie do zarzÄ…dzania energiÄ… dla UPS-Ã³w APC
 Name:		apcupsd
 Version:	3.10.16
 Release:	0.%{_pre}.1
@@ -35,11 +35,11 @@ time or the life of the batteries in your BackUPS, BackUPS Pro,
 SmartUPS v/s, or SmartUPS, and then properly executes a controlled
 shutdown during an extended power failure.
 
-%description -l pl
-Oprogramowanie do zarz±dzania energi± dla UPS-ów APC. Pozwala
-komputerowi dzia³aæ po awarii zasilania przez okre¶lony czas lub czas
-¿ycia akumulatorów w BackUPS, BackUPS Pro, SmartUPS v/s, SmartUPS oraz
-odpowiednio uruchamia kontrolowany shutdown przy d³u¿szej awarii
+%description -l pl.UTF-8
+Oprogramowanie do zarzÄ…dzania energiÄ… dla UPS-Ã³w APC. Pozwala
+komputerowi dziaÅ‚aÄ‡ po awarii zasilania przez okreÅ›lony czas lub czas
+Å¼ycia akumulatorÃ³w w BackUPS, BackUPS Pro, SmartUPS v/s, SmartUPS oraz
+odpowiednio uruchamia kontrolowany shutdown przy dÅ‚uÅ¼szej awarii
 zasilania.
 
 %prep
