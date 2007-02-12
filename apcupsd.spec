@@ -7,7 +7,7 @@
 %bcond_with	snmp	# with SNMP support
 #
 Summary:	Power management software for APC UPS hardware
-Summary(pl):	Oprogramowanie do zarz±dzania energi± dla UPS-ów APC
+Summary(pl.UTF-8):   Oprogramowanie do zarzÄ…dzania energiÄ… dla UPS-Ã³w APC
 Name:		apcupsd
 Version:	3.12.3
 Release:	1
@@ -39,16 +39,16 @@ time or the life of the batteries in your BackUPS, BackUPS Pro,
 SmartUPS v/s, or SmartUPS, and then properly executes a controlled
 shutdown during an extended power failure.
 
-%description -l pl
-Oprogramowanie do zarz±dzania energi± dla UPS-ów APC. Pozwala
-komputerowi dzia³aæ po awarii zasilania przez okre¶lony czas lub czas
-¿ycia akumulatorów w BackUPS, BackUPS Pro, SmartUPS v/s, SmartUPS oraz
-odpowiednio uruchamia kontrolowany shutdown przy d³u¿szej awarii
+%description -l pl.UTF-8
+Oprogramowanie do zarzÄ…dzania energiÄ… dla UPS-Ã³w APC. Pozwala
+komputerowi dziaÅ‚aÄ‡ po awarii zasilania przez okreÅ›lony czas lub czas
+Å¼ycia akumulatorÃ³w w BackUPS, BackUPS Pro, SmartUPS v/s, SmartUPS oraz
+odpowiednio uruchamia kontrolowany shutdown przy dÅ‚uÅ¼szej awarii
 zasilania.
 
 %package cgi 
 Summary:	upsstats - Web-based UPS status viewer
-Summary(pl):	upsstats - oparta na WWW przegl±darka stanu UPS-a
+Summary(pl.UTF-8):   upsstats - oparta na WWW przeglÄ…darka stanu UPS-a
 Group:		Applications/Networking
 Requires:	webserver
 
@@ -56,8 +56,8 @@ Requires:	webserver
 upsstats.cgi builds a lightweight web page containing basic UPS status
 information.
 
-%description cgi -l pl
-upsstats.cgi tworzy lekk± stronê WWW zawieraj±c± podstawowe informacje
+%description cgi -l pl.UTF-8
+upsstats.cgi tworzy lekkÄ… stronÄ™ WWW zawierajÄ…cÄ… podstawowe informacje
 o stanie UPS-a.
 
 %prep
