@@ -7,7 +7,7 @@
 %bcond_with	snmp	# with SNMP support
 #
 Summary:	Power management software for APC UPS hardware
-Summary(pl.UTF-8):   Oprogramowanie do zarządzania energią dla UPS-ów APC
+Summary(pl.UTF-8):	Oprogramowanie do zarządzania energią dla UPS-ów APC
 Name:		apcupsd
 Version:	3.12.3
 Release:	1
@@ -48,7 +48,7 @@ zasilania.
 
 %package cgi 
 Summary:	upsstats - Web-based UPS status viewer
-Summary(pl.UTF-8):   upsstats - oparta na WWW przeglądarka stanu UPS-a
+Summary(pl.UTF-8):	upsstats - oparta na WWW przeglądarka stanu UPS-a
 Group:		Applications/Networking
 Requires:	webserver
 
