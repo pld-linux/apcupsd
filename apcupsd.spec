@@ -9,12 +9,12 @@
 Summary:	Power management software for APC UPS hardware
 Summary(pl.UTF-8):	Oprogramowanie do zarządzania energią dla UPS-ów APC
 Name:		apcupsd
-Version:	3.12.3
+Version:	3.12.4
 Release:	1
 License:	GPL v2
 Group:		Networking/Daemons
 Source0:	http://dl.sourceforge.net/apcupsd/%{name}-%{version}.tar.gz
-# Source0-md5:	e329c5b71cd4d6b179750a7c9b6f0c30
+# Source0-md5:	669c833ec02a2bc29fa98f845e5f5de5
 Source1:	%{name}.init
 Source2:	%{name}.logrotate
 Source3:	%{name}.sysconfig
