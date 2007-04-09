@@ -20,8 +20,6 @@ Source2:	%{name}.logrotate
 Source3:	%{name}.sysconfig
 Patch0:		%{name}-configure.patch
 URL:		http://www.apcupsd.com/
-BuildRequires:	autoconf
-BuildRequires:	automake
 %{?with_snmp:BuildRequires:	net-snmp-devel}
 BuildRequires:	rpmbuild(macros) >= 1.268
 Requires(post):	fileutils
@@ -65,12 +63,6 @@ o stanie UPS-a.
 %patch0 -p1
 
 %build
-cd autoconf
-cp -f /usr/share/automake/config.sub .
-%{__autoconf}
-cp -f configure ..
-cd ..
-
 %configure \
 	--with-log-dir=%{_var}/log \
 	--with-stat-dir=%{_var}/lib/apcupsd \
