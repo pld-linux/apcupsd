@@ -20,6 +20,7 @@ Source2:	%{name}.logrotate
 Source3:	%{name}.sysconfig
 Patch0:		%{name}-configure.patch
 URL:		http://www.apcupsd.com/
+BuildRequires:	autoconf
 %{?with_snmp:BuildRequires:	net-snmp-devel}
 BuildRequires:	rpmbuild(macros) >= 1.268
 Requires(post):	fileutils
@@ -61,8 +62,10 @@ o stanie UPS-a.
 %prep
 %setup -q
 %patch0 -p1
+for i in configure.in aclocal.m4 config.h.in; do install autoconf/$i .;done
 
 %build
+%{__autoconf}
 %configure \
 	--with-log-dir=%{_var}/log \
 	--with-stat-dir=%{_var}/lib/apcupsd \
