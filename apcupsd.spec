@@ -9,18 +9,20 @@
 Summary:	Power management software for APC UPS hardware
 Summary(pl.UTF-8):	Oprogramowanie do zarządzania energią dla UPS-ów APC
 Name:		apcupsd
-Version:	3.12.4
+Version:	3.14.3
 Release:	1
 License:	GPL v2
 Group:		Networking/Daemons
 Source0:	http://dl.sourceforge.net/apcupsd/%{name}-%{version}.tar.gz
-# Source0-md5:	669c833ec02a2bc29fa98f845e5f5de5
+# Source0-md5:	a212351d21828e9344264614c7ad8ba1
 Source1:	%{name}.init
 Source2:	%{name}.logrotate
 Source3:	%{name}.sysconfig
 Patch0:		%{name}-configure.patch
 URL:		http://www.apcupsd.com/
 BuildRequires:	autoconf
+BuildRequires:	gconfmm-devel
+BuildRequires:	ncurses-ext-devel
 %{?with_snmp:BuildRequires:	net-snmp-devel}
 BuildRequires:	rpmbuild(macros) >= 1.268
 Requires(post):	fileutils
@@ -59,6 +61,21 @@ information.
 upsstats.cgi tworzy lekką stronę WWW zawierającą podstawowe informacje
 o stanie UPS-a.
 
+%package gapcmon
+Summary:	Apcupsd GUI monitoring application
+Summary(pl.UTF-8):	Aplikacja GUI monitorowania Apcupsd
+Group:		X11/Applications
+
+%description gapcmon
+Gnome/GTK based application which integrates into most desktop panels (not
+just Gnome). It monitors one or more Apcupsd instances using Apcupsd's NIS
+networking server. The status of each UPS is shown with a icon.
+
+%description gapcmon -l pl.UTF-8
+Oparta na Gnome/GTK aplikacja, która integruje się z panelami (nie tylko
+Gnome). Monitoruje jedną bądź kilka instancji Apcupsd za pomocą serwera
+NIS. Status każdego UPS-a przedstawia ikona.
+
 %prep
 %setup -q
 %patch0 -p1
@@ -76,8 +93,10 @@ for i in configure.in aclocal.m4 config.h.in; do install autoconf/$i .;done
 	%{?with_test:--enable-test} \
 %if %{with net}
 	--enable-net \
-	--enable-master-slave \
 %endif
+	--enable-nls \
+	--enable-powerflute \
+	--enable-gapcmon \
 	%{?with_snmp:--enable-snmp} \
 	%{?with_usb:--enable-usb}
 
@@ -90,7 +109,8 @@ install -d $RPM_BUILD_ROOT/etc/{apcupsd,logrotate.d,rc.d/init.d,sysconfig} \
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
-        
+
+install src/powerflute $RPM_BUILD_ROOT%{_sbindir}        
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/apcupsd
 install %{SOURCE2} $RPM_BUILD_ROOT/etc/logrotate.d/apcupsd
 install %{SOURCE3} $RPM_BUILD_ROOT/etc/sysconfig/apcupsd
@@ -127,8 +147,6 @@ fi
 %attr(754,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/commfailure
 %attr(754,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/commok
 #%attr(754,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/mainsback
-%attr(754,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/masterconnect
-%attr(754,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/mastertimeout
 %attr(754,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/onbattery
 %attr(754,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/offbattery
 %if %{with cgi}
@@ -148,3 +166,9 @@ fi
 %files cgi
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_cgidir}/*.cgi
+
+%files gapcmon
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_bindir}/*
+%{_desktopdir}/gapcmon.desktop
+%{_pixmapsdir}/*
