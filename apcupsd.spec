@@ -69,14 +69,15 @@ Summary(pl.UTF-8):	Aplikacja GUI monitorowania Apcupsd
 Group:		X11/Applications
 
 %description gapcmon
-Gnome/GTK based application which integrates into most desktop panels (not
-just Gnome). It monitors one or more Apcupsd instances using Apcupsd's NIS
-networking server. The status of each UPS is shown with a icon.
+GNOME/GTK+ based application which integrates into most desktop panels
+(not just GNOME). It monitors one or more Apcupsd instances using
+Apcupsd's NIS networking server. The status of each UPS is shown with
+a icon.
 
 %description gapcmon -l pl.UTF-8
-Oparta na Gnome/GTK aplikacja, która integruje się z panelami (nie tylko
-Gnome). Monitoruje jedną bądź kilka instancji Apcupsd za pomocą serwera
-NIS. Status każdego UPS-a przedstawia ikona.
+Oparta na GNOME/GTK+ aplikacja, która integruje się z panelami (nie
+tylko Gnome). Monitoruje jedną bądź kilka instancji Apcupsd za pomocą
+serwera NIS. Status każdego UPS-a przedstawia ikona.
 
 %prep
 %setup -q
