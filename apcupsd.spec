@@ -1,10 +1,11 @@
 #
 # Conditional build:
+%bcond_without	cgi	# without CGI program support
+%bcond_without	gapcmon	# without gapcmon GUI
+%bcond_without	net	# without network support
+%bcond_with	snmp	# with SNMP support
 %bcond_without	test	# without TEST support
 %bcond_without	usb	# without USB support
-%bcond_without	net	# without network support
-%bcond_without	cgi	# with CGI program support
-%bcond_with	snmp	# with SNMP support
 #
 Summary:	Power management software for APC UPS hardware
 Summary(pl.UTF-8):	Oprogramowanie do zarządzania energią dla UPS-ów APC
@@ -21,9 +22,9 @@ Source3:	%{name}.sysconfig
 Patch0:		%{name}-configure.patch
 URL:		http://www.apcupsd.com/
 BuildRequires:	autoconf
-BuildRequires:	gconfmm-devel
+%{?with_gapcmon:	BuildRequires:	gconfmm-devel}
 BuildRequires:	ncurses-ext-devel
-%{?with_snmp:BuildRequires:	net-snmp-devel}
+%{?with_snmp:	BuildRequires:	net-snmp-devel}
 BuildRequires:	rpmbuild(macros) >= 1.268
 Requires(post):	fileutils
 Requires(post,preun):	/sbin/chkconfig
@@ -80,6 +81,7 @@ NIS. Status każdego UPS-a przedstawia ikona.
 %setup -q
 %patch0 -p1
 for i in configure.in aclocal.m4 config.h.in; do install autoconf/$i .;done
+cp -f %{_datadir}/automake/config.sub autoconf
 
 %build
 %{__autoconf}
@@ -96,7 +98,7 @@ for i in configure.in aclocal.m4 config.h.in; do install autoconf/$i .;done
 %endif
 	--enable-nls \
 	--enable-powerflute \
-	--enable-gapcmon \
+	%{?with_gapcmon:--enable-gapcmon} \
 	%{?with_snmp:--enable-snmp} \
 	%{?with_usb:--enable-usb}
 
@@ -163,12 +165,16 @@ fi
 %attr(640,root,root) %ghost /var/lib/apcupsd/apcupsd.status
 %{_mandir}/man8/apcupsd.*
 
+%if %{with cgi}
 %files cgi
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_cgidir}/*.cgi
+%endif
 
+%if %{with gapcmon}
 %files gapcmon
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/*
 %{_desktopdir}/gapcmon.desktop
 %{_pixmapsdir}/*
+%endif
