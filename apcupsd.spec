@@ -1,3 +1,4 @@
+# TODO: /usr/share/hal/fdi/policy/20thirdparty/80-apcupsd-ups-policy.fdi
 #
 # Conditional build:
 %bcond_without	cgi	# without CGI program support
@@ -21,11 +22,13 @@ Source2:	%{name}.logrotate
 Source3:	%{name}.sysconfig
 Patch0:		%{name}-configure.patch
 URL:		http://www.apcupsd.com/
+%{?with_gapcmon:BuildRequires:	GConf2-devel >= 2.0}
 BuildRequires:	autoconf
-%{?with_gapcmon:	BuildRequires:	gconfmm-devel}
 BuildRequires:	gettext-devel
+%{?with_gapcmon:BuildRequires:	gtk+2-devel >= 2:2.4.0}
 BuildRequires:	ncurses-ext-devel
-%{?with_snmp:	BuildRequires:	net-snmp-devel}
+%{?with_snmp:BuildRequires:	net-snmp-devel}
+BuildRequires:	pkgconfig
 BuildRequires:	rpmbuild(macros) >= 1.268
 Requires(post):	fileutils
 Requires(post,preun):	/sbin/chkconfig
@@ -165,7 +168,7 @@ fi
 %dir /var/lib/apcupsd
 %attr(640,root,root) %ghost /var/log/apcupsd.events
 %attr(640,root,root) %ghost /var/lib/apcupsd/apcupsd.status
-%{_mandir}/man8/apcupsd.*
+%{_mandir}/man8/apcupsd.8*
 
 %if %{with cgi}
 %files cgi
@@ -176,7 +179,7 @@ fi
 %if %{with gapcmon}
 %files gapcmon
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_bindir}/*
+%attr(755,root,root) %{_bindir}/gapcmon
 %{_desktopdir}/gapcmon.desktop
-%{_pixmapsdir}/*
+%{_pixmapsdir}/*.png
 %endif
