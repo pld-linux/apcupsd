@@ -14,56 +14,52 @@ diff -urN apcupsd-3.10.13.orig/autoconf/acconfig.h apcupsd-3.10.13.new/autoconf/
  
 --- apcupsd-3.10.13.orig/autoconf/configure.in	2004-04-16 20:14:57.000000000 +0200
 +++ apcupsd-3.10.13.new/autoconf/configure.in	2004-05-22 19:09:30.116115272 +0200
-@@ -1188,16 +1188,25 @@
+@@ -1261,16 +1261,25 @@
  # Find the default directory to put the root-mode PID file in
  for PIDDIR in "/var/run" "/etc/apcupsd"
  do
--	if test -d $PIDDIR 
-+	if test -d $PIDDIR
- 	then
- 		break;
- 	fi
+-   if test -d $PIDDIR 
++   if test -d $PIDDIR
+    then
+       break;
+    fi
  done
  
 -# Find the default directory to put the apcupsd.events and apcupsd.status files
 +# Find the default directory to put the apcupsd.events file
  for LOGDIR in "/var/log" "/etc/apcupsd"
  do
--	if test -d $LOGDIR 
-+	if test -d $LOGDIR
-+	then
-+		break;
-+	fi
+-   if test -d $LOGDIR 
++   if test -d $LOGDIR
++   then
++      break;
++   fi
 +done
 +
 +# Find the default directory to put the apcupsd.status file
 +for STATDIR in "/var/log" "/etc/apcupsd" "/var/lib/apcupsd"
 +do
-+	if test -d $STATDIR
- 	then
- 		break;
- 	fi
-@@ -1497,11 +1506,18 @@
- )
++   if test -d $STATDIR
+    then
+       break;
+    fi
+@@ -1499,9 +1508,14 @@
+ 
  # now allow user to specify LOGDIR
  AC_ARG_WITH(log-dir,
 -    [AC_HELP_STRING([--with-log-dir=DIR], [Specify EVENTS and STATUS directory (default is OS dependent)])],
 +    [AC_HELP_STRING([--with-log-dir=DIR], [Specify EVENTS directory (default is OS dependent)])],
-     [
- 	LOGDIR="$withval";
-     ]
- )
+     [LOGDIR="$withval";])
+ 
 +# now allow user to specify STATDIR
 +AC_ARG_WITH(stat-dir,
 +    [AC_HELP_STRING([--with-stat-dir=DIR], [Specify STATUS directory (default is OS dependent)])],
-+    [
-+	STATDIR="$withval";
-+    ]
-+)
++    [STATDIR="$withval";])
++
  # now allow user to specify LOCKDIR
  AC_ARG_WITH(lock-dir,
-     [  --with-lock-dir=DIR     Specify serial port lock directory (default is OS dependent)],
-@@ -1575,6 +1591,8 @@
+     [AC_HELP_STRING([--with-lock-dir=DIR], [Specify serial port lock directory (default is OS dependent)])],
+@@ -1543,6 +1557,8 @@
  AC_SUBST(PIDDIR)
  AC_DEFINE_UNQUOTED(LOGDIR, "$LOGDIR")
  AC_SUBST(LOGDIR)
@@ -72,16 +68,16 @@ diff -urN apcupsd-3.10.13.orig/autoconf/acconfig.h apcupsd-3.10.13.new/autoconf/
  AC_DEFINE_UNQUOTED(NOLOGDIR, "$nologdir")
  AC_SUBST(nologdir)
  AC_DEFINE_UNQUOTED(PWRFAILDIR, "$PWRFAILDIR")
-@@ -1735,7 +1753,8 @@
-   Install man files:	      ${mandir}
-   Nologin file in:	      ${nologdir}
-   PID directory:	      ${PIDDIR}
+@@ -1713,7 +1729,8 @@
+   Install man files:          ${mandir}
+   Nologin file in:            ${nologdir}
+   PID directory:              ${PIDDIR}
 -  LOG dir (events, status)    ${LOGDIR}
-+  LOG dir (events)            ${LOGDIR}
-+  STATUS dir (status)         ${STATDIR}
++  LOG dir (events)    ${LOGDIR}
++  STAT dir (status)    ${STATDIR}
    LOCK dir (for serial port)  ${LOCKDIR}
-   Power Fail dir	      ${PWRFAILDIR}
-   Compiler:		      ${CC} ${CCVERSION}
+   Power Fail dir              ${PWRFAILDIR}
+   Compiler:                   ${CXX} ${CXXVERSION}
 --- apcupsd-3.12.1/platforms/etc/apcupsd.conf.in.orig	2005-12-31 00:26:41.000000000 +0100
 +++ apcupsd-3.12.1/platforms/etc/apcupsd.conf.in	2006-01-24 13:45:20.000000000 +0100
 @@ -227,7 +227,7 @@
