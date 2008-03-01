@@ -23,6 +23,7 @@ Patch0:		%{name}-configure.patch
 URL:		http://www.apcupsd.com/
 BuildRequires:	autoconf
 %{?with_gapcmon:	BuildRequires:	gconfmm-devel}
+BuildRequires:	gettext-devel
 BuildRequires:	ncurses-ext-devel
 %{?with_snmp:	BuildRequires:	net-snmp-devel}
 BuildRequires:	rpmbuild(macros) >= 1.268
