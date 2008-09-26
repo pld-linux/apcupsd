@@ -11,12 +11,12 @@
 Summary:	Power management software for APC UPS hardware
 Summary(pl.UTF-8):	Oprogramowanie do zarządzania energią dla UPS-ów APC
 Name:		apcupsd
-Version:	3.14.3
+Version:	3.14.4
 Release:	1
 License:	GPL v2
 Group:		Networking/Daemons
 Source0:	http://dl.sourceforge.net/apcupsd/%{name}-%{version}.tar.gz
-# Source0-md5:	a212351d21828e9344264614c7ad8ba1
+# Source0-md5:	78811129db1a882b9a2b9afd540470b3
 Source1:	%{name}.init
 Source2:	%{name}.logrotate
 Source3:	%{name}.sysconfig
@@ -101,8 +101,6 @@ cp -f %{_datadir}/automake/config.sub autoconf
 %if %{with net}
 	--enable-net \
 %endif
-	--enable-nls \
-	--enable-powerflute \
 	%{?with_gapcmon:--enable-gapcmon} \
 	%{?with_snmp:--enable-snmp} \
 	%{?with_usb:--enable-usb}
@@ -117,7 +115,6 @@ install -d $RPM_BUILD_ROOT/etc/{apcupsd,logrotate.d,rc.d/init.d,sysconfig} \
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
-install src/powerflute $RPM_BUILD_ROOT%{_sbindir}        
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/apcupsd
 install %{SOURCE2} $RPM_BUILD_ROOT/etc/logrotate.d/apcupsd
 install %{SOURCE3} $RPM_BUILD_ROOT/etc/sysconfig/apcupsd
