@@ -12,7 +12,7 @@ Summary:	Power management software for APC UPS hardware
 Summary(pl.UTF-8):	Oprogramowanie do zarządzania energią dla UPS-ów APC
 Name:		apcupsd
 Version:	3.14.4
-Release:	1
+Release:	2
 License:	GPL v2
 Group:		Networking/Daemons
 Source0:	http://dl.sourceforge.net/apcupsd/%{name}-%{version}.tar.gz
@@ -21,6 +21,7 @@ Source1:	%{name}.init
 Source2:	%{name}.logrotate
 Source3:	%{name}.sysconfig
 Patch0:		%{name}-configure.patch
+Patch1:		%{name}-pcnet-seconds.patch
 URL:		http://www.apcupsd.com/
 %{?with_gapcmon:BuildRequires:	GConf2-devel >= 2.0}
 BuildRequires:	autoconf
@@ -85,6 +86,7 @@ serwera NIS. Status każdego UPS-a przedstawia ikona.
 %prep
 %setup -q
 %patch0 -p1
+%patch1 -p1
 for i in configure.in aclocal.m4 config.h.in; do install autoconf/$i .;done
 cp -f %{_datadir}/automake/config.sub autoconf
 
