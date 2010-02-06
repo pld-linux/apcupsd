@@ -1,0 +1,2 @@
+- simplified bcond, added %verify(not md5 size mtime)
+- removed Source0-size
