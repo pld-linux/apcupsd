@@ -16,7 +16,7 @@ Release:	1
 License:	GPL v2
 Group:		Networking/Daemons
 Source0:	http://dl.sourceforge.net/apcupsd/%{name}-%{version}.tar.gz
-# Source0-md5:	bb2f8e4fc6b2f5d7b3e236eb57b81640
+# Source0-md5:	cd17f0a903dc2220e55ed54e242359d2
 Source1:	%{name}.init
 Source2:	%{name}.logrotate
 Source3:	%{name}.sysconfig
@@ -25,12 +25,14 @@ Patch1:		%{name}-pcnet-seconds.patch
 URL:		http://www.apcupsd.com/
 %{?with_gapcmon:BuildRequires:	GConf2-devel >= 2.0}
 BuildRequires:	autoconf
-BuildRequires:	gettext-devel
+BuildRequires:	automake
+BuildRequires:	gd-devel
 %{?with_gapcmon:BuildRequires:	gtk+2-devel >= 2:2.4.0}
-BuildRequires:	ncurses-ext-devel
+BuildRequires:	man
 %{?with_snmp:BuildRequires:	net-snmp-devel}
 BuildRequires:	pkgconfig
 BuildRequires:	rpmbuild(macros) >= 1.268
+BuildRequires:	util-linux-ng
 Requires(post):	fileutils
 Requires(post,preun):	/sbin/chkconfig
 Requires:	rc-scripts
@@ -53,7 +55,7 @@ komputerowi działać po awarii zasilania przez określony czas lub czas
 odpowiednio uruchamia kontrolowany shutdown przy dłuższej awarii
 zasilania.
 
-%package cgi 
+%package cgi
 Summary:	upsstats - Web-based UPS status viewer
 Summary(pl.UTF-8):	upsstats - oparta na WWW przeglądarka stanu UPS-a
 Group:		Applications/Networking
@@ -93,6 +95,9 @@ cp -f %{_datadir}/automake/config.sub autoconf
 %build
 %{__autoconf}
 %configure \
+	APCUPSD_MAIL="/bin/mail" \
+	SHUTDOWN="/sbin/shutdown" \
+	WALL="%{_bindir}/wall" \
 	--with-log-dir=%{_var}/log \
 	--with-stat-dir=%{_var}/lib/apcupsd \
 %if %{with cgi}
@@ -145,7 +150,10 @@ fi
 %files
 %defattr(644,root,root,755)
 %doc ChangeLog Developers
-%attr(755,root,root) %{_sbindir}/*
+%attr(755,root,root) %{_sbindir}/apcaccess
+%attr(755,root,root) %{_sbindir}/apctest
+%attr(755,root,root) %{_sbindir}/apcupsd
+%attr(755,root,root) %{_sbindir}/smtp
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/apcupsd.conf
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/apcupsd
 %attr(754,root,root) %{_sysconfdir}/apccontrol
