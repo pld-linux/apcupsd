@@ -1,0 +1,5 @@
+- updated to 3.10.12 (almost all fixes from Zbigniew Bryczkowski)
+- added init script, logrotate
+- patch0 - fix dirs
+- %post,%preun,%files fixes
+- rel. 0.9 - need to be tested
