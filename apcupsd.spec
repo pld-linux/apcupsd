@@ -33,7 +33,7 @@ BuildRequires:	man
 %{?with_snmp:BuildRequires:	net-snmp-devel}
 BuildRequires:	pkgconfig
 BuildRequires:	rpmbuild(macros) >= 1.268
-BuildRequires:	util-linux-ng
+BuildRequires:	util-linux
 Requires(post):	fileutils
 Requires(post,preun):	/sbin/chkconfig
 Requires:	rc-scripts
@@ -176,8 +176,7 @@ fi
 %dir /var/lib/apcupsd
 %attr(640,root,root) %ghost /var/log/apcupsd.events
 %attr(640,root,root) %ghost /var/lib/apcupsd/apcupsd.status
-%{_mandir}/man*/*
-
+%{_mandir}/man8/apcupsd.8*
 
 %if %{with cgi}
 %files cgi
