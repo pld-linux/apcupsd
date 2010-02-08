@@ -15,7 +15,7 @@ Version:	3.14.8
 Release:	1
 License:	GPL v2
 Group:		Networking/Daemons
-Source0:	http://dl.sourceforge.net/apcupsd/%{name}-%{version}.tar.gz
+Source0:	http://downloads.sourceforge.net/apcupsd/%{name}-%{version}.tar.gz
 # Source0-md5:	cd17f0a903dc2220e55ed54e242359d2
 Source1:	%{name}.init
 Source2:	%{name}.logrotate
@@ -24,6 +24,7 @@ Patch0:		%{name}-configure.patch
 Patch1:		%{name}-pcnet-seconds.patch
 URL:		http://www.apcupsd.com/
 %{?with_gapcmon:BuildRequires:	GConf2-devel >= 2.0}
+BuildRequires:	SysVinit
 BuildRequires:	autoconf
 %{?with_cgi:BuildRequires:	gd-devel}
 BuildRequires:	gettext-devel
