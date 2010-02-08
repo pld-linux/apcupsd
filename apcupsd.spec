@@ -1,4 +1,5 @@
-# TODO: /usr/share/hal/fdi/policy/20thirdparty/80-apcupsd-ups-policy.fdi
+# TODO
+# - /usr/share/hal/fdi/policy/20thirdparty/80-apcupsd-ups-policy.fdi
 #
 # Conditional build:
 %bcond_without	cgi	# without CGI program support
@@ -9,7 +10,7 @@
 %bcond_without	usb	# without USB support
 #
 Summary:	Power management software for APC UPS hardware
-Summary(pl.UTF-8):	Oprogramowanie do zarz??dzania energi?? dla UPS-??w APC
+Summary(pl.UTF-8):	Oprogramowanie do zarządzania energią dla UPS-ów APC
 Name:		apcupsd
 Version:	3.14.8
 Release:	1
@@ -49,15 +50,15 @@ SmartUPS v/s, or SmartUPS, and then properly executes a controlled
 shutdown during an extended power failure.
 
 %description -l pl.UTF-8
-Oprogramowanie do zarz??dzania energi?? dla UPS-??w APC. Pozwala
-komputerowi dzia??a?? po awarii zasilania przez okre??lony czas lub czas
-??ycia akumulator??w w BackUPS, BackUPS Pro, SmartUPS v/s, SmartUPS oraz
-odpowiednio uruchamia kontrolowany shutdown przy d??u??szej awarii
+Oprogramowanie do zarządzania energią dla UPS-ów APC. Pozwala
+komputerowi działać po awarii zasilania przez określony czas lub czas
+życia akumulatorów w BackUPS, BackUPS Pro, SmartUPS v/s, SmartUPS oraz
+odpowiednio uruchamia kontrolowany shutdown przy dłuższej awarii
 zasilania.
 
-%package cgi 
+%package cgi
 Summary:	upsstats - Web-based UPS status viewer
-Summary(pl.UTF-8):	upsstats - oparta na WWW przegl??darka stanu UPS-a
+Summary(pl.UTF-8):	upsstats - oparta na WWW przeglądarka stanu UPS-a
 Group:		Applications/Networking
 Requires:	webserver
 
@@ -66,7 +67,7 @@ upsstats.cgi builds a lightweight web page containing basic UPS status
 information.
 
 %description cgi -l pl.UTF-8
-upsstats.cgi tworzy lekk?? stron?? WWW zawieraj??c?? podstawowe informacje
+upsstats.cgi tworzy lekką stronę WWW zawierającą podstawowe informacje
 o stanie UPS-a.
 
 %package gapcmon
@@ -81,9 +82,9 @@ Apcupsd's NIS networking server. The status of each UPS is shown with
 a icon.
 
 %description gapcmon -l pl.UTF-8
-Oparta na GNOME/GTK+ aplikacja, kt??ra integruje si?? z panelami (nie
-tylko Gnome). Monitoruje jedn?? b??d?? kilka instancji Apcupsd za pomoc??
-serwera NIS. Status ka??dego UPS-a przedstawia ikona.
+Oparta na GNOME/GTK+ aplikacja, która integruje się z panelami (nie
+tylko Gnome). Monitoruje jedną bądź kilka instancji Apcupsd za pomocą
+serwera NIS. Status każdego UPS-a przedstawia ikona.
 
 %prep
 %setup -q
