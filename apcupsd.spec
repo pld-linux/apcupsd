@@ -25,15 +25,15 @@ Patch0:		%{name}-configure.patch
 Patch1:		%{name}-pcnet-seconds.patch
 URL:		http://www.apcupsd.com/
 %{?with_gapcmon:BuildRequires:	GConf2-devel >= 2.0}
-BuildRequires:	SysVinit
 BuildRequires:	autoconf
-%{?with_cgi:BuildRequires:	gd-devel}
-BuildRequires:	gettext-devel
+BuildRequires:	automake
+BuildRequires:	gd-devel
 %{?with_gapcmon:BuildRequires:	gtk+2-devel >= 2:2.4.0}
-BuildRequires:	ncurses-ext-devel
+BuildRequires:	man
 %{?with_snmp:BuildRequires:	net-snmp-devel}
 BuildRequires:	pkgconfig
 BuildRequires:	rpmbuild(macros) >= 1.268
+BuildRequires:	util-linux
 Requires(post):	fileutils
 Requires(post,preun):	/sbin/chkconfig
 Requires:	rc-scripts
@@ -96,6 +96,9 @@ cp -f %{_datadir}/automake/config.sub autoconf
 %build
 %{__autoconf}
 %configure \
+	APCUPSD_MAIL="/bin/mail" \
+	SHUTDOWN="/sbin/shutdown" \
+	WALL="%{_bindir}/wall" \
 	--with-log-dir=%{_var}/log \
 	--with-stat-dir=%{_var}/lib/apcupsd \
 %if %{with cgi}
@@ -148,7 +151,10 @@ fi
 %files
 %defattr(644,root,root,755)
 %doc ChangeLog Developers
-%attr(755,root,root) %{_sbindir}/*
+%attr(755,root,root) %{_sbindir}/apcaccess
+%attr(755,root,root) %{_sbindir}/apctest
+%attr(755,root,root) %{_sbindir}/apcupsd
+%attr(755,root,root) %{_sbindir}/smtp
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/apcupsd.conf
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/apcupsd
 %attr(754,root,root) %{_sysconfdir}/apccontrol
