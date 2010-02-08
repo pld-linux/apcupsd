@@ -1,6 +1,5 @@
 # TODO
 # - /usr/share/hal/fdi/policy/20thirdparty/80-apcupsd-ups-policy.fdi
-# - fix sysvinit dependency on build
 #
 # Conditional build:
 %bcond_without	cgi	# without CGI program support
@@ -26,8 +25,6 @@ Patch0:		%{name}-configure.patch
 Patch1:		%{name}-pcnet-seconds.patch
 URL:		http://www.apcupsd.com/
 %{?with_gapcmon:BuildRequires:	GConf2-devel >= 2.0}
-# for /sbin/shutdown
-BuildRequires:	SysVinit
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	gd-devel
