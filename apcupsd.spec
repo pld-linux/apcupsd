@@ -1,5 +1,3 @@
-# TODO
-# - /usr/share/hal/fdi/policy/20thirdparty/80-apcupsd-ups-policy.fdi
 #
 # Conditional build:
 %bcond_without	cgi	# without CGI program support
@@ -8,7 +6,7 @@
 %bcond_with	snmp	# with SNMP support
 %bcond_without	test	# without TEST support
 %bcond_without	usb	# without USB support
-#
+
 Summary:	Power management software for APC UPS hardware
 Summary(pl.UTF-8):	Oprogramowanie do zarządzania energią dla UPS-ów APC
 Name:		apcupsd
@@ -74,6 +72,7 @@ o stanie UPS-a.
 Summary:	Apcupsd GUI monitoring application
 Summary(pl.UTF-8):	Aplikacja GUI monitorowania Apcupsd
 Group:		X11/Applications
+URL:		http://gapcmon.sourceforge.net/
 
 %description gapcmon
 GNOME/GTK+ based application which integrates into most desktop panels
@@ -123,17 +122,20 @@ install -d $RPM_BUILD_ROOT/etc/{apcupsd,logrotate.d,rc.d/init.d,sysconfig} \
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
-install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/apcupsd
-install %{SOURCE2} $RPM_BUILD_ROOT/etc/logrotate.d/apcupsd
-install %{SOURCE3} $RPM_BUILD_ROOT/etc/sysconfig/apcupsd
+install -p %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/apcupsd
+cp -p %{SOURCE2} $RPM_BUILD_ROOT/etc/logrotate.d/apcupsd
+cp -p %{SOURCE3} $RPM_BUILD_ROOT/etc/sysconfig/apcupsd
 
 touch $RPM_BUILD_ROOT/var/log/apcupsd.events
 touch $RPM_BUILD_ROOT/var/lib/apcupsd/apcupsd.status
 
 cat > $RPM_BUILD_ROOT/etc/rc.d/init.d/halt << EOF
 #!/bin/sh
-/etc/rc.d/init.d/apcupsd powerdown
+exec /etc/rc.d/init.d/apcupsd powerdown
 EOF
+
+# no hal
+%{__rm} $RPM_BUILD_ROOT%{_datadir}/hal/fdi/policy/20thirdparty/80-apcupsd-ups-policy.fdi
 
 %clean
 rm -rf $RPM_BUILD_ROOT
