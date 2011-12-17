@@ -52,6 +52,17 @@ stop() {
 	rm -f /var/lock/subsys/apcupsd
 }
 
+condrestart() {
+	if [ ! -f /var/lock/subsys/apcupsd ]; then
+		msg_not_running "APC UPS monitoring"
+		RETVAL=$1
+		return
+	fi
+
+	stop
+	start
+}
+
 powerdown() {
 	if [ ! -f /etc/apcupsd/powerfail ]; then
 		return
@@ -72,9 +83,15 @@ case "$1" in
   stop)
 	stop
 	;;
-  restart|force-reload)
+  restart)
 	stop
 	start
+	;;
+  try-restart)
+	condrestart 0
+	;;
+  force-reload)
+	condrestart 7
 	;;
   powerdown)
 	powerdown
@@ -83,7 +100,7 @@ case "$1" in
 	/usr/sbin/apcaccess status
 	;;
   *)
-	msg_usage "$0 {start|stop|restart|force-reload|powerdown|status}"
+	msg_usage "$0 {start|stop|restart|try-restart|force-reload|powerdown|status}"
 	exit 3
 esac
 
