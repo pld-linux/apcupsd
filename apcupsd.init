@@ -24,50 +24,66 @@ fi
 
 # Get service config
 if [ -f /etc/sysconfig/apcupsd ]; then
-        . /etc/sysconfig/apcupsd
+	. /etc/sysconfig/apcupsd
 fi
+
+start() {
+	# Check if the service is already running?
+	if [ -f /var/lock/subsys/apcupsd ]; then
+		msg_already_running "APC UPS monitoring"
+		return
+	fi
+
+	msg_starting "APC UPS monitoring"
+	rm -f /etc/apcupsd/powerfail
+	daemon $SERVICE_RUN_NICE_LEVEL /usr/sbin/apcupsd -f /etc/apcupsd/apcupsd.conf
+	RETVAL=$?
+	[ $RETVAL -eq 0 ] && touch /var/lock/subsys/apcupsd
+}
+
+stop() {
+	if [ ! -f /var/lock/subsys/apcupsd ]; then
+		msg_not_running "APC UPS monitoring"
+		return
+	fi
+
+	msg_stopping "APC UPS monitoring"
+	killproc apcupsd
+	rm -f /var/lock/subsys/apcupsd
+}
+
+powerdown() {
+	if [ ! -f /etc/apcupsd/powerfail ]; then
+		return
+	fi
+
+	show "Switching the power off"
+	/etc/apcupsd/apccontrol killpower
+	sleep 60
+	fail
+}
 
 RETVAL=0
 # See how we were called.
 case "$1" in
   start)
-	rm -f /etc/apcupsd/powerfail
-	# Check if the service is already running?
-	if [ ! -f /var/lock/subsys/apcupsd ]; then
-		msg_starting "APC UPS monitoring"
-		daemon $SERVICE_RUN_NICE_LEVEL /usr/sbin/apcupsd -f /etc/apcupsd/apcupsd.conf
-		RETVAL=$?
-		[ $RETVAL -eq 0 ] && touch /var/lock/subsys/apcupsd
-	else
-		msg_already_running "APC UPS monitoring"
-	fi
+	start
 	;;
   stop)
-	if [ -f /var/lock/subsys/apcupsd ]; then
-		msg_stopping "APC UPS monitoring"
-		killproc apcupsd
-		rm -f /var/lock/subsys/apcupsd
-	else
-		msg_not_running "APC UPS monitoring"
-	fi
+	stop
 	;;
   restart|force-reload)
-	$0 stop
-	$0 start
+	stop
+	start
 	;;
   powerdown)
-	if [ -f /etc/apcupsd/powerfail ]; then
-		show "Switching the power off"
-		/etc/apcupsd/apccontrol killpower
-		sleep 60
-		fail
-	fi
+	powerdown
 	;;
   status)
 	/usr/sbin/apcaccess status
 	;;
   *)
-	msg_usage "$0 {start|stop|restart|force-reload|status|powerdown}"
+	msg_usage "$0 {start|stop|restart|force-reload|powerdown|status}"
 	exit 3
 esac
 
