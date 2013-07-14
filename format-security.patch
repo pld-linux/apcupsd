@@ -1,0 +1,19 @@
+--- apcupsd-3.14.10/src/gapcmon/gapcmon.c~	2008-09-16 06:58:20.000000000 +0200
++++ apcupsd-3.14.10/src/gapcmon/gapcmon.c	2013-07-14 20:18:41.520640348 +0200
+@@ -2883,15 +2883,9 @@
+ static void gapc_util_log_app_msg(gchar * pch_func, gchar * pch_topic,
+    gchar * pch_emsg)
+ {
+-   gchar *pch = NULL;
+-
+    g_return_if_fail(pch_func != NULL);
+ 
+-   pch = g_strdup_printf("%s(%s) emsg=%s", pch_func, pch_topic, pch_emsg);
+-
+-   g_message(pch);
+-
+-   g_free(pch);
++   g_message("%s(%s) emsg=%s", pch_func, pch_topic, pch_emsg);
+ 
+    return;
+ }
