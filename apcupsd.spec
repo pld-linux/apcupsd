@@ -102,6 +102,9 @@ cp -f %{_datadir}/automake/config.sub autoconf
 	WALL="%{_bindir}/wall" \
 	--with-log-dir=%{_var}/log \
 	--with-stat-dir=%{_var}/lib/apcupsd \
+	--enable-apcsmart \
+	--enable-dumb \
+	--enable-pcnet \
 %if %{with cgi}
 	--enable-cgi \
 	--with-cgi-bin=/home/services/httpd/cgi-bin \
