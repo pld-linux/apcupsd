@@ -11,7 +11,7 @@ Summary:	Power management software for APC UPS hardware
 Summary(pl.UTF-8):	Oprogramowanie do zarządzania energią dla UPS-ów APC
 Name:		apcupsd
 Version:	3.14.10
-Release:	3
+Release:	4
 License:	GPL v2
 Group:		Networking/Daemons
 Source0:	http://downloads.sourceforge.net/apcupsd/%{name}-%{version}.tar.gz
@@ -22,6 +22,11 @@ Source3:	%{name}.sysconfig
 Patch0:		%{name}-configure.patch
 Patch1:		%{name}-pcnet-seconds.patch
 Patch2:		format-security.patch
+Patch3:		shutdown.patch
+Patch4:		cxxld.patch
+Patch5:		systemd.patch
+Patch6:		fixgui.patch
+Patch7:		nodbg.patch
 URL:		http://www.apcupsd.com/
 %{?with_gapcmon:BuildRequires:	GConf2-devel >= 2.0}
 BuildRequires:	autoconf
@@ -31,11 +36,13 @@ BuildRequires:	gd-devel
 BuildRequires:	man-db
 %{?with_snmp:BuildRequires:	net-snmp-devel}
 BuildRequires:	pkgconfig
-BuildRequires:	rpmbuild(macros) >= 1.268
+BuildRequires:	rpmbuild(macros) >= 1.647
 BuildRequires:	util-linux
+Requires:	systemd-units >= 0.38
+Requires:	rc-scripts
 Requires(post):	fileutils
 Requires(post,preun):	/sbin/chkconfig
-Requires:	rc-scripts
+Requires(post,preun,postun):	systemd-units >= 38
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_sysconfdir	/etc/apcupsd
@@ -91,6 +98,11 @@ serwera NIS. Status każdego UPS-a przedstawia ikona.
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
+%patch3 -p1
+%patch4 -p1
+%patch5 -p1
+%patch6 -p1
+%patch7 -p1
 
 %build
 for i in configure.in aclocal.m4 config.h.in; do install autoconf/$i .;done
@@ -130,6 +142,10 @@ install -p %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/apcupsd
 cp -p %{SOURCE2} $RPM_BUILD_ROOT/etc/logrotate.d/apcupsd
 cp -p %{SOURCE3} $RPM_BUILD_ROOT/etc/sysconfig/apcupsd
 
+# systemd support
+install -p -D apcupsd.service $RPM_BUILD_ROOT%{systemdunitdir}/apcupsd.service
+install -p -D apcupsd_shutdown $RPM_BUILD_ROOT%{systemdunitdir}-shutdown/apcupsd_shutdown
+
 touch $RPM_BUILD_ROOT/var/log/apcupsd.events
 touch $RPM_BUILD_ROOT/var/lib/apcupsd/apcupsd.status
 
@@ -147,12 +163,17 @@ rm -rf $RPM_BUILD_ROOT
 %post
 /sbin/chkconfig --add apcupsd
 %service apcupsd restart "apcupsd daemon"
+%systemd_post %{name}.service
 
 %preun
 if [ "$1" = "0" ]; then
 	%service apcupsd stop
 	/sbin/chkconfig --del apcupsd
 fi
+%systemd_preun %{name}.service
+
+%postun
+%systemd_reload
 
 %files
 %defattr(644,root,root,755)
@@ -177,6 +198,8 @@ fi
 %endif
 %attr(754,root,root) /etc/rc.d/init.d/apcupsd
 %attr(754,root,root) /etc/rc.d/init.d/halt
+%{systemdunitdir}/%{name}.service
+%attr(755,root,root) %{systemdunitdir}-shutdown/apcupsd_shutdown
 %attr(640,root,root) %config(noreplace) %verify(not md5 mtime size) /etc/logrotate.d/apcupsd
 %dir %{_sysconfdir}
 %dir /var/lib/apcupsd

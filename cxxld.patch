@@ -1,0 +1,19 @@
+fix FTBFS, c++ linking needs -lstdc++ explicitly
+https://bugzilla.redhat.com/show_bug.cgi?id=631288
+
+diff -up apcupsd-3.14.8/src/Makefile.cxxld apcupsd-3.14.8/src/Makefile
+--- apcupsd-3.14.8/src/Makefile.cxxld	2009-09-30 01:20:45.000000000 +0200
++++ apcupsd-3.14.8/src/Makefile	2010-09-22 11:18:03.550601657 +0200
+@@ -26,10 +26,10 @@ SRCS = $(common_srcs) $(apcupsd_srcs) $(
+ all-targets: apcupsd apcaccess apctest smtp 
+ 
+ apcupsd: $(common_obj) $(apcupsd_obj) $(APCDRVLIBS) $(APCLIBS)
+-	$(LINK) $(DRVLIBS)
++	$(LINK) -lstdc++ $(DRVLIBS)
+ 
+ apctest: $(common_obj) $(apctest_obj) $(APCDRVLIBS) $(APCLIBS)
+-	$(LINK) $(DRVLIBS)
++	$(LINK) -lstdc++ $(DRVLIBS)
+ 
+ apcaccess: $(apcaccess_obj) $(APCLIBS)
+ 	$(LINK)
