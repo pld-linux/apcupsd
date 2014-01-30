@@ -98,6 +98,7 @@ case "$1" in
 	;;
   status)
 	/usr/sbin/apcaccess status
+	RETVAL=$?
 	;;
   *)
 	msg_usage "$0 {start|stop|restart|try-restart|force-reload|powerdown|status}"
