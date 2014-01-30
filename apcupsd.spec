@@ -91,10 +91,10 @@ serwera NIS. Status każdego UPS-a przedstawia ikona.
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
-for i in configure.in aclocal.m4 config.h.in; do install autoconf/$i .;done
-cp -f %{_datadir}/automake/config.sub autoconf
 
 %build
+for i in configure.in aclocal.m4 config.h.in; do install autoconf/$i .;done
+cp -f %{_datadir}/automake/config.sub autoconf
 %{__autoconf}
 %configure \
 	APCUPSD_MAIL="/bin/mail" \
@@ -107,14 +107,13 @@ cp -f %{_datadir}/automake/config.sub autoconf
 	--with-cgi-bin=/home/services/httpd/cgi-bin \
 %endif
 	%{?with_test:--enable-test} \
-%if %{with net}
-	--enable-net \
-%endif
+	%{?with_net:--enable-net} \
 	%{?with_gapcmon:--enable-gapcmon} \
 	%{?with_snmp:--enable-snmp} \
 	%{?with_usb:--enable-usb}
 
-%{__make}
+%{__make} \
+	VERBOSE=2
 
 %install
 rm -rf $RPM_BUILD_ROOT
