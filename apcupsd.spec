@@ -191,11 +191,6 @@ fi
 #%attr(754,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/mainsback
 %attr(754,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/onbattery
 %attr(754,root,root) %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/offbattery
-%if %{with cgi}
-%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/hosts.conf
-%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/multimon.conf
-%{_sysconfdir}/apcupsd.css
-%endif
 %attr(754,root,root) /etc/rc.d/init.d/apcupsd
 %attr(754,root,root) /etc/rc.d/init.d/halt
 %{systemdunitdir}/%{name}.service
@@ -214,6 +209,9 @@ fi
 %if %{with cgi}
 %files cgi
 %defattr(644,root,root,755)
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/hosts.conf
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/multimon.conf
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/apcupsd.css
 %attr(755,root,root) %{_cgidir}/*.cgi
 %endif
 
