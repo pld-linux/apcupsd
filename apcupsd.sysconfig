@@ -3,3 +3,11 @@
 # Try to define nice-level for running apcupsd
 SERVICE_RUN_NICE_LEVEL="+5"
 
+# Options override for apccontrol tool.
+# These would be used by "hook" scripts
+
+# to whom send reports
+SYSADMIN=root
+
+# path to program to use for mail sending
+APCUPSD_MAIL="/bin/mail"

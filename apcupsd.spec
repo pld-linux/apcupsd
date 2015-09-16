@@ -20,7 +20,7 @@ Source1:	%{name}.init
 Source2:	%{name}.logrotate
 Source3:	%{name}.sysconfig
 Patch0:		%{name}-configure.patch
-
+Patch1:		control-config.patch
 Patch2:		format-security.patch
 Patch3:		shutdown.patch
 Patch4:		cxxld.patch
@@ -38,8 +38,8 @@ BuildRequires:	man-db
 BuildRequires:	pkgconfig
 BuildRequires:	rpmbuild(macros) >= 1.647
 BuildRequires:	util-linux
-Requires:	systemd-units >= 0.38
 Requires:	rc-scripts
+Requires:	systemd-units >= 0.38
 Requires(post):	fileutils
 Requires(post,preun):	/sbin/chkconfig
 Requires(post,preun,postun):	systemd-units >= 38
@@ -96,7 +96,7 @@ serwera NIS. Status każdego UPS-a przedstawia ikona.
 %prep
 %setup -q
 %patch0 -p1
-
+%patch1 -p1
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1

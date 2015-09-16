@@ -1,0 +1,10 @@
+--- apcupsd-3.14.13/platforms/apccontrol.in~	2015-09-16 16:48:10.000000000 +0300
++++ apcupsd-3.14.13/platforms/apccontrol.in	2015-09-16 17:16:01.239002981 +0300
+@@ -27,6 +27,7 @@
+ 
+ export SYSADMIN=root
+ export APCUPSD_MAIL="@APCUPSD_MAIL@"
++[ -f /etc/sysconfig/apcupsd ] && . /etc/sysconfig/apcupsd
+ if [ -f $SCRIPTDIR/config ]; then . $SCRIPTDIR/config ; fi
+ 
+ #
