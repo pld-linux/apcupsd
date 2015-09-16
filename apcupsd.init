@@ -97,6 +97,7 @@ case "$1" in
 	powerdown
 	;;
   status)
+	status apcupsd
 	/usr/sbin/apcaccess status
 	RETVAL=$?
 	;;
