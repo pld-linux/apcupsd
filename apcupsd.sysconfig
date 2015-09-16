@@ -7,7 +7,7 @@ SERVICE_RUN_NICE_LEVEL="+5"
 # These would be used by "hook" scripts
 
 # to whom send reports
-SYSADMIN=root
+#SYSADMIN=root
 
 # path to program to use for mail sending
-APCUPSD_MAIL="/bin/mail"
+#APCUPSD_MAIL="/bin/mail"
