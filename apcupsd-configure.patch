@@ -1,19 +1,17 @@
-diff -urN apcupsd-3.10.13.orig/autoconf/acconfig.h apcupsd-3.10.13.new/autoconf/acconfig.h
---- apcupsd-3.10.13.orig/autoconf/acconfig.h	2004-04-16 15:18:42.000000000 +0200
-+++ apcupsd-3.10.13.new/autoconf/acconfig.h	2004-05-22 15:54:12.854409808 +0200
-@@ -97,6 +97,10 @@
- /* Define the default "log" files directory. */
+--- apcupsd-3.14.13/./autoconf/config.h.in~	2015-01-02 19:12:47.000000000 +0200
++++ apcupsd-3.14.13/./autoconf/config.h.in	2015-09-16 16:40:33.785163382 +0300
+@@ -295,6 +295,9 @@
+ /* Default directory in which log is written */
  #undef LOGDIR
  
 +/* Define the default "status" files directory. */
 +#undef STATDIR
 +
-+
- /* Define the default serial port lock directory */
- #undef LOCKDIR
+ /* Default port number for NIS server */
+ #undef NISPORT
  
---- apcupsd-3.10.13.orig/autoconf/configure.in	2004-04-16 20:14:57.000000000 +0200
-+++ apcupsd-3.10.13.new/autoconf/configure.in	2004-05-22 19:09:30.116115272 +0200
+--- apcupsd-3.14.13/autoconf/configure.in~	2015-09-16 16:36:41.000000000 +0300
++++ apcupsd-3.14.13/autoconf/configure.in	2015-09-16 16:37:57.190362425 +0300
 @@ -1261,16 +1261,25 @@
  # Find the default directory to put the root-mode PID file in
  for PIDDIR in "/var/run" "/etc/apcupsd"
@@ -59,15 +57,15 @@ diff -urN apcupsd-3.10.13.orig/autoconf/acconfig.h apcupsd-3.10.13.new/autoconf/
  # now allow user to specify LOCKDIR
  AC_ARG_WITH(lock-dir,
      [AC_HELP_STRING([--with-lock-dir=DIR], [Specify serial port lock directory (default is OS dependent)])],
-@@ -1543,6 +1557,8 @@
- AC_SUBST(PIDDIR)
- AC_DEFINE_UNQUOTED(LOGDIR, "$LOGDIR")
+@@ -1396,6 +1396,8 @@
  AC_SUBST(LOGDIR)
+ AC_DEFINE_UNQUOTED(NOLOGDIR, "$nologdir", [Default directory in which nologin file is written])
+ AC_SUBST(nologdir)
 +AC_DEFINE_UNQUOTED(STATDIR, "$STATDIR")
 +AC_SUBST(STATDIR)
- AC_DEFINE_UNQUOTED(NOLOGDIR, "$nologdir")
- AC_SUBST(nologdir)
- AC_DEFINE_UNQUOTED(PWRFAILDIR, "$PWRFAILDIR")
+ AC_DEFINE_UNQUOTED(PWRFAILDIR, "$PWRFAILDIR", [Default directory in which powerfail flag file is written])
+ AC_SUBST(PWRFAILDIR)
+ AC_SUBST(LOCKDIR)
 @@ -1713,7 +1729,8 @@
    Install man files:          ${mandir}
    Nologin file in:            ${nologdir}

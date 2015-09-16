@@ -1,9 +1,8 @@
 https://bugzilla.redhat.com/show_bug.cgi?id=1053324
 
-diff -up apcupsd-3.14.10/src/drivers/snmplite/asn.cpp.nodbg apcupsd-3.14.10/src/drivers/snmplite/asn.cpp
---- apcupsd-3.14.10/src/drivers/snmplite/asn.cpp.nodbg	2010-09-07 17:35:13.000000000 +0200
-+++ apcupsd-3.14.10/src/drivers/snmplite/asn.cpp	2014-01-21 17:07:27.603049214 +0100
-@@ -26,10 +26,13 @@
+--- apcupsd-3.14.13/src/drivers/snmplite/asn.cpp~	2014-04-06 18:40:11.000000000 +0300
++++ apcupsd-3.14.13/src/drivers/snmplite/asn.cpp	2015-09-16 16:46:03.485622689 +0300
+@@ -26,6 +26,8 @@
  #include <stdlib.h>
  #include <stdio.h>
  
@@ -11,18 +10,15 @@ diff -up apcupsd-3.14.10/src/drivers/snmplite/asn.cpp.nodbg apcupsd-3.14.10/src/
 +
  using namespace Asn;
  
- void debug(const char *foo, int indent)
- {
-+   if (!debug_level) return;
-    while (indent--)
-       printf(" ");
-    printf("%s\n", foo);
-@@ -86,7 +89,7 @@ Object *Object::Demarshal(unsigned char
+ // *****************************************************************************
+@@ -71,7 +73,9 @@
        obj = new Sequence(type);
        break;      
     default:
 -      printf("UNKNOWN ASN type=0x%02x\n", type);
-+      if (debug_level) printf("UNKNOWN ASN type=0x%02x\n", type);
-       debug("UNKNOWN", indent);
++      if (debug_level) {
++         printf("UNKNOWN ASN type=0x%02x\n", type);
++      }
        obj = NULL;
        break;      
+    }
