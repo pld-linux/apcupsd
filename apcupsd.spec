@@ -1,21 +1,21 @@
 #
 # Conditional build:
-%bcond_without	cgi	# without CGI program support
-%bcond_without	gapcmon	# without gapcmon GUI
-%bcond_without	net	# without network support
-%bcond_with	snmp	# with SNMP support
-%bcond_without	test	# without TEST support
-%bcond_without	usb	# without USB support
+%bcond_without	cgi	# CGI program support
+%bcond_without	gapcmon	# gapcmon GUI
+%bcond_without	net	# network support
+%bcond_with	snmp	# SNMP support
+%bcond_without	test	# TEST support
+%bcond_without	usb	# USB support
 
 Summary:	Power management software for APC UPS hardware
 Summary(pl.UTF-8):	Oprogramowanie do zarządzania energią dla UPS-ów APC
 Name:		apcupsd
-Version:	3.14.13
+Version:	3.14.14
 Release:	1
 License:	GPL v2
 Group:		Networking/Daemons
-Source0:	http://downloads.sourceforge.net/apcupsd/%{name}-%{version}.tar.gz
-# Source0-md5:	c291d9d3923b4d9c0e600b755ad4f489
+Source0:	https://downloads.sourceforge.net/apcupsd/%{name}-%{version}.tar.gz
+# Source0-md5:	cc8f5ced77f38906a274787acb9bc980
 Source1:	%{name}.init
 Source2:	%{name}.logrotate
 Source3:	%{name}.sysconfig
@@ -33,6 +33,8 @@ BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	gd-devel
 %{?with_gapcmon:BuildRequires:	gtk+2-devel >= 2:2.4.0}
+BuildRequires:	libstdc++-devel
+BuildRequires:	libwrap-devel
 BuildRequires:	man-db
 %{?with_snmp:BuildRequires:	net-snmp-devel}
 BuildRequires:	pkgconfig
@@ -80,7 +82,8 @@ o stanie UPS-a.
 Summary:	Apcupsd GUI monitoring application
 Summary(pl.UTF-8):	Aplikacja GUI monitorowania Apcupsd
 Group:		X11/Applications
-URL:		http://gapcmon.sourceforge.net/
+URL:		https://gapcmon.sourceforge.net/
+Requires:	gtk+2 >= 2:2.4.0
 
 %description gapcmon
 GNOME/GTK+ based application which integrates into most desktop panels
@@ -105,26 +108,29 @@ serwera NIS. Status każdego UPS-a przedstawia ikona.
 %patch7 -p1
 
 %build
-for i in configure.in aclocal.m4 config.h.in; do install autoconf/$i .;done
-cp -f %{_datadir}/automake/config.sub autoconf
+for i in configure.in aclocal.m4 config.h.in; do
+	cp -pf autoconf/$i .
+done
+cp -pf %{_datadir}/automake/{config.guess,config.sub,install-sh,mkinstalldirs} autoconf
 %{__autoconf}
 %configure \
 	APCUPSD_MAIL="/bin/mail" \
 	SHUTDOWN="/sbin/shutdown" \
 	WALL="%{_bindir}/wall" \
+	--with-libwrap \
 	--with-log-dir=%{_var}/log \
 	--with-stat-dir=%{_var}/lib/apcupsd \
 	--enable-apcsmart \
-	--enable-dumb \
-	--enable-pcnet \
 %if %{with cgi}
 	--enable-cgi \
 	--with-cgi-bin=/home/services/httpd/cgi-bin \
 %endif
-	%{?with_test:--enable-test} \
-	%{?with_net:--enable-net} \
+	--enable-dumb \
 	%{?with_gapcmon:--enable-gapcmon} \
+	%{?with_net:--enable-net} \
+	--enable-pcnet \
 	%{?with_snmp:--enable-snmp} \
+	%{?with_test:--enable-test} \
 	%{?with_usb:--enable-usb}
 
 %{__make} \
@@ -177,7 +183,7 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%doc ChangeLog Developers
+%doc ChangeLog Developers ReleaseNotes
 %attr(755,root,root) %{_sbindir}/apcaccess
 %attr(755,root,root) %{_sbindir}/apctest
 %attr(755,root,root) %{_sbindir}/apcupsd
@@ -212,7 +218,10 @@ fi
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/hosts.conf
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/multimon.conf
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/apcupsd.css
-%attr(755,root,root) %{_cgidir}/*.cgi
+%attr(755,root,root) %{_cgidir}/multimon.cgi
+%attr(755,root,root) %{_cgidir}/upsfstats.cgi
+%attr(755,root,root) %{_cgidir}/upsimage.cgi
+%attr(755,root,root) %{_cgidir}/upsstats.cgi
 %endif
 
 %if %{with gapcmon}
@@ -220,5 +229,10 @@ fi
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/gapcmon
 %{_desktopdir}/gapcmon.desktop
-%{_pixmapsdir}/*.png
+%{_pixmapsdir}/apcupsd.png
+%{_pixmapsdir}/charging.png
+%{_pixmapsdir}/gapc_prefs.png
+%{_pixmapsdir}/onbatt.png
+%{_pixmapsdir}/online.png
+%{_pixmapsdir}/unplugged.png
 %endif

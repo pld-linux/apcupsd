@@ -12,6 +12,25 @@
  
 --- apcupsd-3.14.13/autoconf/configure.in~	2015-09-16 16:36:41.000000000 +0300
 +++ apcupsd-3.14.13/autoconf/configure.in	2015-09-16 16:37:57.190362425 +0300
+@@ -14,7 +14,7 @@ dnl Config header file.
+ AC_CONFIG_HEADER(include/apcconfig.h:autoconf/config.h.in)
+ 
+ topdir=`pwd`
+-AC_CONFIG_AUX_DIR(${topdir}/autoconf)
++AC_CONFIG_AUX_DIR([autoconf])
+ 
+ dnl
+ dnl Absolute srcdir
+@@ -887,9 +887,6 @@ dnl If the AC_CONFIG_AUX_DIR macro for a
+ dnl find the mkinstalldirs script in another subdir than ($topdir).
+ dnl Try to locate it.
+ MKINSTALLDIRS=
+-if test -n "$ac_aux_dir"; then
+-   MKINSTALLDIRS="$ac_aux_dir/mkinstalldirs"
+-fi
+ if test x$MKINSTALLDIRS = x ; then
+    MKINSTALLDIRS="\$(topdir)/autoconf/mkinstalldirs"
+ fi
 @@ -1261,16 +1261,25 @@
  # Find the default directory to put the root-mode PID file in
  for PIDDIR in "/var/run" "/etc/apcupsd"
